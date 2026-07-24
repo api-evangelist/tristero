@@ -1,0 +1,318 @@
+openapi: 3.0.3
+info:
+  title: Tristero Assets Orders API
+  description: Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.
+  version: 2.0.0
+  contact:
+    name: Tristero Support
+    url: https://tristero.com
+servers:
+- url: https://api.tristero.com/v2
+  description: Production
+- url: https://staging-api.tristero.com/v2
+  description: Staging
+- url: http://localhost:8060
+  description: Local (Quoter)
+- url: http://localhost:8070
+  description: Local (Filler)
+security:
+- ApiKeyAuth: []
+tags:
+- name: Orders
+  description: Submit and manage orders
+paths:
+  /orders:
+    post:
+      tags:
+      - Orders
+      summary: Submit an order
+      description: Submit a signed order for execution. Supports spot swaps, margin positions, and feather swaps.
+      operationId: fillOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/Permit2OrderSubmission'
+              - $ref: '#/components/schemas/FeatherOrderSubmission'
+              - $ref: '#/components/schemas/MarginOrderSubmission'
+              discriminator:
+                propertyName: order_type
+                mapping:
+                  PERMIT2: '#/components/schemas/Permit2OrderSubmission'
+                  FEATHER: '#/components/schemas/FeatherOrderSubmission'
+                  MARGIN: '#/components/schemas/MarginOrderSubmission'
+      responses:
+        '200':
+          description: Order submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderSubmissionResponse'
+        '400':
+          description: Invalid order data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /orders/close-margin-position:
+    post:
+      tags:
+      - Orders
+      summary: Close a margin position
+      description: Submit a signed request to close a margin position. Can close partially or fully, with cash settlement or swap settlement.
+      operationId: closeMarginPosition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClosePositionSubmission'
+      responses:
+        '200':
+          description: Close position order submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClosePositionResponse'
+components:
+  schemas:
+    ClosePositionResponse:
+      type: object
+      properties:
+        close_order:
+          type: object
+          properties:
+            id:
+              type: string
+              description: Close order ID
+        id:
+          type: string
+        order_id:
+          type: string
+    Permit2OrderSubmission:
+      type: object
+      required:
+      - signature
+      - domain
+      - message
+      properties:
+        signature:
+          type: string
+          description: EIP-712 signature (0x-prefixed hex)
+          example: 0x...
+        domain:
+          $ref: '#/components/schemas/EIP712Domain'
+        message:
+          $ref: '#/components/schemas/PermitWitnessTransferFrom'
+    TokenPermissions:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token contract address
+        amount:
+          type: string
+          description: Permitted amount
+    OrderSubmissionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Order ID for tracking
+        order_id:
+          type: string
+          description: Order ID (alternative field)
+        status:
+          type: string
+          description: Initial order status
+        deposit_address:
+          type: string
+          description: 'For Feather swaps: address to send funds to'
+        detail:
+          type: object
+          description: Error details if submission failed
+    ClosePositionSubmission:
+      type: object
+      required:
+      - signature
+      - domain
+      - message
+      - chainId
+      - typed_data
+      properties:
+        signature:
+          type: string
+          description: EIP-712 signature for CloseWithSwap
+        domain:
+          $ref: '#/components/schemas/EIP712Domain'
+        message:
+          type: object
+          description: CloseWithSwap message data
+          properties:
+            positionId:
+              type: integer
+              description: Position NFT token ID
+            cashSettle:
+              type: boolean
+              description: True for cash settlement, false for swap settlement
+            fractionBps:
+              type: integer
+              description: Fraction to close in basis points (10000 = 100%)
+            authorized:
+              type: string
+              description: Authorized filler address
+            nonce:
+              type: integer
+              description: Unique nonce for the signature
+            deadline:
+              type: integer
+              description: Unix timestamp deadline
+        chainId:
+          type: string
+          description: Chain ID
+        typed_data:
+          type: object
+          description: Complete typed data for verification
+    MarginOrderSubmission:
+      type: object
+      required:
+      - signature
+      - domain
+      - message
+      - typed_data
+      properties:
+        signature:
+          type: string
+          description: EIP-712 signature
+        domain:
+          $ref: '#/components/schemas/EIP712Domain'
+        message:
+          $ref: '#/components/schemas/PermitWitnessTransferFrom'
+        typed_data:
+          type: object
+          description: Full typed data structure used for signing
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        detail:
+          type: object
+          description: Additional error details
+    SignedOrder:
+      type: object
+      properties:
+        sender:
+          type: string
+          description: Order sender address
+        parameters:
+          $ref: '#/components/schemas/OrderParameters'
+        deadline:
+          type: string
+          description: Order deadline
+        target:
+          type: string
+          description: Target/recipient address
+        filler:
+          type: string
+          description: Authorized filler address
+        orderType:
+          type: string
+          enum:
+          - FEATHER
+          - PERMIT2
+          - MARGIN
+        customData:
+          type: array
+          items:
+            type: string
+    FeatherOrderSubmission:
+      type: object
+      required:
+      - client_id
+      - src_chain
+      - dst_chain
+      - dst_address
+      - amount
+      properties:
+        client_id:
+          type: string
+          description: Client identifier
+        src_chain:
+          type: string
+          description: Source chain ID
+        dst_chain:
+          type: string
+          description: Destination chain ID
+        dst_address:
+          type: string
+          description: Destination address for funds
+        amount:
+          type: integer
+          description: Amount to swap
+    PermitWitnessTransferFrom:
+      type: object
+      description: EIP-712 PermitWitnessTransferFrom message structure
+      properties:
+        permitted:
+          $ref: '#/components/schemas/TokenPermissions'
+        spender:
+          type: string
+          description: Address authorized to spend tokens
+        nonce:
+          type: string
+          description: Unique nonce to prevent replay
+        deadline:
+          type: string
+          description: Signature expiration timestamp
+        witness:
+          $ref: '#/components/schemas/SignedOrder'
+    OrderParameters:
+      type: object
+      properties:
+        src_asset:
+          type: string
+          description: Source token address
+        dst_asset:
+          type: string
+          description: Destination token address
+        src_quantity:
+          type: string
+          description: Source amount
+        dst_quantity:
+          type: string
+          description: Expected destination amount
+        min_quantity:
+          type: string
+          description: Minimum acceptable output (slippage protection)
+        dark_salt:
+          type: string
+          description: Random salt for order uniqueness
+    EIP712Domain:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Permit2
+        version:
+          type: string
+          example: '1'
+        chainId:
+          type: integer
+          description: Chain ID where the contract is deployed
+        verifyingContract:
+          type: string
+          description: Contract address that verifies the signature
+          example: '0x000000000022D473030F116dDEE9F6B43aC78BA3'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (if required by deployment)
+externalDocs:
+  description: Tristero Python SDK Documentation
+  url: https://pypi.org/project/tristero/

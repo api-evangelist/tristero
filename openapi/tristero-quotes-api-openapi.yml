@@ -1,0 +1,312 @@
+openapi: 3.0.3
+info:
+  title: Tristero Assets Quotes API
+  description: Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.
+  version: 2.0.0
+  contact:
+    name: Tristero Support
+    url: https://tristero.com
+servers:
+- url: https://api.tristero.com/v2
+  description: Production
+- url: https://staging-api.tristero.com/v2
+  description: Staging
+- url: http://localhost:8060
+  description: Local (Quoter)
+- url: http://localhost:8070
+  description: Local (Filler)
+security:
+- ApiKeyAuth: []
+tags:
+- name: Quotes
+  description: Request quotes for swaps and margin positions
+paths:
+  /quotes:
+    post:
+      tags:
+      - Quotes
+      summary: Get a spot swap quote
+      description: Request a quote for a cross-chain spot swap. Returns order parameters that can be signed and submitted.
+      operationId: getQuote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteRequest'
+            examples:
+              arbitrum-usdc-to-base-usdt:
+                summary: Arbitrum USDC to Base USDT
+                value:
+                  src_chain_id: '42161'
+                  src_token_address: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
+                  src_token_quantity: '1000000'
+                  src_wallet_address: 0x...
+                  dst_chain_id: '8453'
+                  dst_token_address: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2'
+                  dst_wallet_address: 0x...
+      responses:
+        '200':
+          description: Quote response with order data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Unprocessable - route not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /quotes/margin:
+    post:
+      tags:
+      - Quotes
+      summary: Get a margin quote
+      description: Request a quote for opening a leveraged margin position. Any token can be used as collateral.
+      operationId: getMarginQuote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarginQuoteRequest'
+            examples:
+              2x-long-weth:
+                summary: 2x Long WETH with USDC collateral
+                value:
+                  chain_id: '42161'
+                  wallet_address: 0x...
+                  collateral_token: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
+                  base_token: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
+                  leverage_ratio: 2
+                  collateral_amount: '1000000'
+      responses:
+        '200':
+          description: Margin quote response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarginQuoteResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    QuoteRequest:
+      type: object
+      required:
+      - src_chain_id
+      - src_token_address
+      - src_token_quantity
+      - src_wallet_address
+      - dst_chain_id
+      - dst_token_address
+      - dst_wallet_address
+      properties:
+        src_chain_id:
+          type: string
+          description: Source chain ID (e.g., '1' for Ethereum, '42161' for Arbitrum)
+          example: '42161'
+        src_token_address:
+          type: string
+          description: Source token address or 'native' for gas token
+          example: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
+        src_token_quantity:
+          type: string
+          description: Amount to swap in raw units (wei/token decimals)
+          example: '1000000'
+        src_wallet_address:
+          type: string
+          description: Source wallet address
+          example: 0x...
+        dst_chain_id:
+          type: string
+          description: Destination chain ID
+          example: '8453'
+        dst_token_address:
+          type: string
+          description: Destination token address or 'native'
+          example: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2'
+        dst_wallet_address:
+          type: string
+          description: Destination wallet address
+          example: 0x...
+    TokenMetadata:
+      type: object
+      properties:
+        address:
+          type: string
+        symbol:
+          type: string
+        name:
+          type: string
+        decimals:
+          type: integer
+    TokenInfo:
+      type: object
+      properties:
+        chain_id:
+          type: integer
+        address:
+          type: string
+        symbol:
+          type: string
+        decimals:
+          type: integer
+    MarginQuoteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        chain_id:
+          type: string
+          description: Chain ID
+        collateral_token:
+          $ref: '#/components/schemas/TokenMetadata'
+        base_token:
+          $ref: '#/components/schemas/TokenMetadata'
+        loan_token:
+          $ref: '#/components/schemas/TokenMetadata'
+        interest_rate_bps:
+          type: integer
+          description: Annual interest rate in basis points
+        order_data:
+          $ref: '#/components/schemas/OrderData'
+        position_size:
+          type: string
+          description: Total position size in base token units
+        loan_amount:
+          type: string
+          description: Amount being borrowed
+    OrderData:
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/OrderParameters'
+        deadline:
+          type: integer
+          description: Unix timestamp deadline
+        router_address:
+          type: string
+          description: Router contract address
+        filler_wallet_address:
+          type: string
+          description: Filler wallet address
+        order_type:
+          type: string
+          enum:
+          - FEATHER
+          - PERMIT2
+          - MARGIN
+        custom_data:
+          type: array
+          items:
+            type: string
+            format: binary
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        detail:
+          type: object
+          description: Additional error details
+    OrderParameters:
+      type: object
+      properties:
+        src_asset:
+          type: string
+          description: Source token address
+        dst_asset:
+          type: string
+          description: Destination token address
+        src_quantity:
+          type: string
+          description: Source amount
+        dst_quantity:
+          type: string
+          description: Expected destination amount
+        min_quantity:
+          type: string
+          description: Minimum acceptable output (slippage protection)
+        dark_salt:
+          type: string
+          description: Random salt for order uniqueness
+    MarginQuoteRequest:
+      type: object
+      required:
+      - chain_id
+      - wallet_address
+      - collateral_token
+      - base_token
+      - leverage_ratio
+      - collateral_amount
+      properties:
+        chain_id:
+          type: string
+          description: Chain ID where position will be opened
+          example: '42161'
+        wallet_address:
+          type: string
+          description: User's wallet address
+          example: 0x...
+        collateral_token:
+          type: string
+          description: Collateral token address (any ERC20, e.g., USDC, USDT0, WETH)
+          example: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
+        base_token:
+          type: string
+          description: Base token address for the position (e.g., WETH for long ETH)
+          example: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
+        leverage_ratio:
+          type: integer
+          description: Leverage multiplier (e.g., 2 for 2x)
+          minimum: 1
+          example: 2
+        collateral_amount:
+          type: string
+          description: Collateral amount in raw units
+          example: '1000000'
+    QuoteResponse:
+      type: object
+      properties:
+        src_token:
+          $ref: '#/components/schemas/TokenInfo'
+        dst_token:
+          $ref: '#/components/schemas/TokenInfo'
+        order_data:
+          $ref: '#/components/schemas/OrderData'
+        order_type:
+          type: string
+          enum:
+          - FEATHER
+          - PERMIT2
+          description: Type of swap mechanism
+        order_id:
+          type: string
+          description: Unique order identifier
+        router_address:
+          type: string
+          description: Router contract address for Permit2 approvals
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (if required by deployment)
+externalDocs:
+  description: Tristero Python SDK Documentation
+  url: https://pypi.org/project/tristero/

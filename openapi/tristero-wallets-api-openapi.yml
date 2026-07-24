@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: Tristero Assets Wallets API
+  description: Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.
+  version: 2.0.0
+  contact:
+    name: Tristero Support
+    url: https://tristero.com
+servers:
+- url: https://api.tristero.com/v2
+  description: Production
+- url: https://staging-api.tristero.com/v2
+  description: Staging
+- url: http://localhost:8060
+  description: Local (Quoter)
+- url: http://localhost:8070
+  description: Local (Filler)
+security:
+- ApiKeyAuth: []
+tags:
+- name: Wallets
+  description: Wallet and position queries
+paths:
+  /wallets/margin-positions/{position_id}:
+    get:
+      tags:
+      - Wallets
+      summary: Get margin position
+      description: Get details of a specific margin position by ID.
+      operationId: getMarginPosition
+      parameters:
+      - name: position_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Position ID
+      responses:
+        '200':
+          description: Margin position details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarginPosition'
+  /wallets/{wallet}/margin-positions:
+    get:
+      tags:
+      - Wallets
+      summary: List margin positions
+      description: Get all margin positions for a wallet address.
+      operationId: getMarginPositions
+      parameters:
+      - name: wallet
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^0x[a-fA-F0-9]{40}$
+        description: Wallet address (checksum)
+      responses:
+        '200':
+          description: List of margin positions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MarginPosition'
+components:
+  schemas:
+    MarginPosition:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Position ID
+        status:
+          type: string
+          enum:
+          - open
+          - closing
+          - closed
+          description: Position status
+        escrow_address:
+          type: string
+          description: Escrow contract address holding the position
+        filler_address:
+          type: string
+          description: Authorized filler address
+        taker_token_id:
+          type: integer
+          description: NFT token ID representing the position
+        wallet_address:
+          type: string
+          description: Owner wallet address
+        collateral_token:
+          type: string
+          description: Collateral token address
+        base_token:
+          type: string
+          description: Base token address
+        loan_token:
+          type: string
+          description: Loan token address
+        collateral_amount:
+          type: string
+          description: Collateral amount in raw units
+        loan_amount:
+          type: string
+          description: Outstanding loan amount
+        leverage_ratio:
+          type: integer
+          description: Position leverage
+        interest_rate_bps:
+          type: integer
+          description: Annual interest rate in basis points
+        opened_at:
+          type: string
+          format: date-time
+          description: Position open timestamp
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (if required by deployment)
+externalDocs:
+  description: Tristero Python SDK Documentation
+  url: https://pypi.org/project/tristero/

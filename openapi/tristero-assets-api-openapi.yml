@@ -1,0 +1,159 @@
+openapi: 3.0.3
+info:
+  title: Tristero Assets API
+  description: Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.
+  version: 2.0.0
+  contact:
+    name: Tristero Support
+    url: https://tristero.com
+servers:
+- url: https://api.tristero.com/v2
+  description: Production
+- url: https://staging-api.tristero.com/v2
+  description: Staging
+- url: http://localhost:8060
+  description: Local (Quoter)
+- url: http://localhost:8070
+  description: Local (Filler)
+security:
+- ApiKeyAuth: []
+tags:
+- name: Assets
+paths:
+  /assets:
+    get:
+      operationId: getAssets
+      summary: List supported assets
+      description: Returns the list of supported assets and their current market prices and liquidity information.
+      tags:
+      - Assets
+      responses:
+        '200':
+          description: List of assets with pricing information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssetPrice'
+              example:
+              - AssetName: BTC
+                UsdMarketMid: 65432.18
+                HalfSpread: 0.0012
+                MarketHalfSpread: 0.0008
+                HalfFee: 0.00015
+                MinAmount: 0.001
+                MaxOutput: 10.5
+                MaxInput: 15.0
+                PriceImpactRate: 5.0e-05
+                CapacityFraction: 0.73
+                TargetBalance: 20.0
+                CurrentBalance: 14.6
+                FundingAddress: bc1qfeatherfundingaddress1234567890abcdef
+              - AssetName: ETH
+                UsdMarketMid: 3456.78
+                HalfSpread: 0.0008
+                MarketHalfSpread: 0.0005
+                HalfFee: 0.0025
+                MinAmount: 0.01
+                MaxOutput: 150.0
+                MaxInput: 200.0
+                PriceImpactRate: 2.0e-05
+                CapacityFraction: 0.85
+                TargetBalance: 200.0
+                CurrentBalance: 170.0
+                FundingAddress: 0xFeatherFundingAddress1234567890abcdef1234
+components:
+  schemas:
+    AssetPrice:
+      type: object
+      example:
+        AssetName: BTC
+        UsdMarketMid: 65432.18
+        HalfSpread: 0.0012
+        MarketHalfSpread: 0.0008
+        HalfFee: 0.00015
+        MinAmount: 0.001
+        MaxOutput: 10.5
+        MaxInput: 15.0
+        PriceImpactRate: 5.0e-05
+        CapacityFraction: 0.73
+        TargetBalance: 20.0
+        CurrentBalance: 14.6
+        FundingAddress: bc1qfeatherfundingaddress1234567890abcdef
+      properties:
+        AssetName:
+          type: string
+          description: Asset identifier (e.g. "BTC")
+          example: BTC
+        UsdMarketMid:
+          type: number
+          format: float
+          description: Current USD mid-market price
+          example: 65432.18
+        HalfSpread:
+          type: number
+          format: float
+          description: Half the bid-ask spread applied to trades
+        MarketHalfSpread:
+          type: number
+          format: float
+          description: External market half-spread for reference
+        HalfFee:
+          type: number
+          format: float
+          description: Estimated half of the on-chain fee in asset units
+        MinAmount:
+          type: number
+          format: float
+          description: Minimum deposit amount Feather will process
+        MaxOutput:
+          type: number
+          format: float
+          description: Maximum amount Feather will pay out of this asset
+        MaxInput:
+          type: number
+          format: float
+          description: Maximum amount Feather will accept as input
+        PriceImpactRate:
+          type: number
+          format: float
+          description: λ — rate of price adjustment per unit traded
+        CapacityFraction:
+          type: number
+          format: float
+          description: Current balance as a fraction of target
+        TargetBalance:
+          type: number
+          format: float
+          description: Target balance in asset units
+        CurrentBalance:
+          type: number
+          format: float
+          description: Current liquid balance in asset units
+        FundingAddress:
+          type: string
+          description: Feather's main address for this asset (for funding/monitoring)
+      required:
+      - AssetName
+      - UsdMarketMid
+      - HalfSpread
+      - MarketHalfSpread
+      - HalfFee
+      - MinAmount
+      - MaxOutput
+      - MaxInput
+      - PriceImpactRate
+      - CapacityFraction
+      - TargetBalance
+      - CurrentBalance
+      - FundingAddress
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (if required by deployment)
+externalDocs:
+  description: Tristero Python SDK Documentation
+  url: https://pypi.org/project/tristero/
