@@ -1,0 +1,113 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tristero-api-openapi.json + openapi/tristero-feather-api-openapi.json ($ref links and id-reference fields)
+description: >-
+  Entity-relationship graph of Tristero's trading objects, derived from the
+  schema $ref links in the two published OpenAPI specs. The spot/margin
+  domain centers on quotes that carry signable OrderData; the Feather domain
+  is a flat Trade record that moves through a deposit -> send -> finalize
+  state machine.
+entities:
+- name: QuoteRequest
+  api: Tristero API
+- name: QuoteResponse
+  api: Tristero API
+- name: MarginQuoteRequest
+  api: Tristero API
+- name: MarginQuoteResponse
+  api: Tristero API
+- name: OrderData
+  api: Tristero API
+- name: OrderParameters
+  api: Tristero API
+- name: Permit2OrderSubmission
+  api: Tristero API
+- name: MarginOrderSubmission
+  api: Tristero API
+- name: FeatherOrderSubmission
+  api: Tristero API
+- name: ClosePositionSubmission
+  api: Tristero API
+- name: SignedOrder
+  api: Tristero API
+- name: MarginPosition
+  api: Tristero API
+  id_field: id
+- name: TokenInfo
+  api: Tristero API
+- name: TokenMetadata
+  api: Tristero API
+- name: Trade
+  api: Feather API
+  id_field: TradeID
+- name: AssetPrice
+  api: Feather API
+relationships:
+- from: QuoteResponse
+  to: OrderData
+  type: has_one
+  via: $ref
+- from: QuoteResponse
+  to: TokenInfo
+  type: has_many
+  via: $ref
+- from: MarginQuoteResponse
+  to: OrderData
+  type: has_one
+  via: $ref
+- from: MarginQuoteResponse
+  to: TokenMetadata
+  type: has_many
+  via: $ref
+- from: OrderData
+  to: OrderParameters
+  type: has_one
+  via: $ref
+- from: Permit2OrderSubmission
+  to: EIP712Domain
+  type: has_one
+  via: $ref
+- from: Permit2OrderSubmission
+  to: PermitWitnessTransferFrom
+  type: has_one
+  via: $ref
+- from: MarginOrderSubmission
+  to: EIP712Domain
+  type: has_one
+  via: $ref
+- from: MarginOrderSubmission
+  to: PermitWitnessTransferFrom
+  type: has_one
+  via: $ref
+- from: ClosePositionSubmission
+  to: EIP712Domain
+  type: has_one
+  via: $ref
+- from: PermitWitnessTransferFrom
+  to: SignedOrder
+  type: has_one
+  via: $ref
+- from: PermitWitnessTransferFrom
+  to: TokenPermissions
+  type: has_one
+  via: $ref
+- from: SignedOrder
+  to: OrderParameters
+  type: has_one
+  via: $ref
+- from: MarginPosition
+  to: wallet
+  type: belongs_to
+  via: wallet_address
+- from: MarginPosition
+  to: TokenMetadata
+  type: belongs_to
+  via: collateral_token / base_token / loan_token
+- from: Trade
+  to: AssetPrice
+  type: belongs_to
+  via: InputAsset / OutputAsset
+- from: Trade
+  to: PriceInfo
+  type: has_one
+  via: PriceInfo

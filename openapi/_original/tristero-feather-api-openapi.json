@@ -1,0 +1,967 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Feather API",
+    "description": "A simple HTTP/JSON API for cross-chain swaps. No authentication required.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Tristero Support",
+      "url": "https://tristero.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://feather-prod.tristero.com",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/assets": {
+      "get": {
+        "operationId": "getAssets",
+        "summary": "List supported assets",
+        "description": "Returns the list of supported assets and their current market prices and liquidity information.",
+        "tags": ["Assets"],
+        "responses": {
+          "200": {
+            "description": "List of assets with pricing information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssetPrice"
+                  }
+                },
+                "example": [
+                  {
+                    "AssetName": "BTC",
+                    "UsdMarketMid": 65432.18,
+                    "HalfSpread": 0.0012,
+                    "MarketHalfSpread": 0.0008,
+                    "HalfFee": 0.00015,
+                    "MinAmount": 0.001,
+                    "MaxOutput": 10.5,
+                    "MaxInput": 15.0,
+                    "PriceImpactRate": 0.00005,
+                    "CapacityFraction": 0.73,
+                    "TargetBalance": 20.0,
+                    "CurrentBalance": 14.6,
+                    "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+                  },
+                  {
+                    "AssetName": "ETH",
+                    "UsdMarketMid": 3456.78,
+                    "HalfSpread": 0.0008,
+                    "MarketHalfSpread": 0.0005,
+                    "HalfFee": 0.0025,
+                    "MinAmount": 0.01,
+                    "MaxOutput": 150.0,
+                    "MaxInput": 200.0,
+                    "PriceImpactRate": 0.00002,
+                    "CapacityFraction": 0.85,
+                    "TargetBalance": 200.0,
+                    "CurrentBalance": 170.0,
+                    "FundingAddress": "0xFeatherFundingAddress1234567890abcdef1234"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/price": {
+      "get": {
+        "operationId": "getPrice",
+        "summary": "Get price quote",
+        "description": "Returns a live price quote for a swap between two assets. Optionally computes a worked example for a specific input or output amount.",
+        "tags": ["Pricing"],
+        "parameters": [
+          {
+            "name": "input_asset",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "BTC"
+            },
+            "description": "Asset you are sending (e.g. BTC)"
+          },
+          {
+            "name": "output_asset",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ETH"
+            },
+            "description": "Asset you want to receive (e.g. ETH)"
+          },
+          {
+            "name": "input_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 0.5
+            },
+            "description": "If provided, compute the expected output for this input amount"
+          },
+          {
+            "name": "output_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 5.0
+            },
+            "description": "If provided, estimate the required input to receive this output amount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Price information for the requested swap",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceInfo"
+                },
+                "examples": {
+                  "basicQuote": {
+                    "summary": "Basic price quote",
+                    "value": {
+                      "InputAsset": {
+                        "AssetName": "BTC",
+                        "UsdMarketMid": 65432.18,
+                        "HalfSpread": 0.0012,
+                        "MarketHalfSpread": 0.0008,
+                        "HalfFee": 0.00015,
+                        "MinAmount": 0.001,
+                        "MaxOutput": 10.5,
+                        "MaxInput": 15.0,
+                        "PriceImpactRate": 0.00005,
+                        "CapacityFraction": 0.73,
+                        "TargetBalance": 20.0,
+                        "CurrentBalance": 14.6,
+                        "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+                      },
+                      "OutputAsset": {
+                        "AssetName": "ETH",
+                        "UsdMarketMid": 3456.78,
+                        "HalfSpread": 0.0008,
+                        "MarketHalfSpread": 0.0005,
+                        "HalfFee": 0.0025,
+                        "MinAmount": 0.01,
+                        "MaxOutput": 150.0,
+                        "MaxInput": 200.0,
+                        "PriceImpactRate": 0.00002,
+                        "CapacityFraction": 0.85,
+                        "TargetBalance": 200.0,
+                        "CurrentBalance": 170.0,
+                        "FundingAddress": "0xFeatherFundingAddress1234567890abcdef1234"
+                      },
+                      "ExchangeRate": 18.92,
+                      "InputFee": 0.0003,
+                      "MaxInput": 10.5,
+                      "MinInput": 0.001,
+                      "MaxOutput": 150.0
+                    }
+                  },
+                  "quoteWithInputAmount": {
+                    "summary": "Quote with input amount example",
+                    "value": {
+                      "InputAsset": {
+                        "AssetName": "BTC",
+                        "UsdMarketMid": 65432.18,
+                        "HalfSpread": 0.0012,
+                        "MarketHalfSpread": 0.0008,
+                        "HalfFee": 0.00015,
+                        "MinAmount": 0.001,
+                        "MaxOutput": 10.5,
+                        "MaxInput": 15.0,
+                        "PriceImpactRate": 0.00005,
+                        "CapacityFraction": 0.73,
+                        "TargetBalance": 20.0,
+                        "CurrentBalance": 14.6,
+                        "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+                      },
+                      "OutputAsset": {
+                        "AssetName": "ETH",
+                        "UsdMarketMid": 3456.78,
+                        "HalfSpread": 0.0008,
+                        "MarketHalfSpread": 0.0005,
+                        "HalfFee": 0.0025,
+                        "MinAmount": 0.01,
+                        "MaxOutput": 150.0,
+                        "MaxInput": 200.0,
+                        "PriceImpactRate": 0.00002,
+                        "CapacityFraction": 0.85,
+                        "TargetBalance": 200.0,
+                        "CurrentBalance": 170.0,
+                        "FundingAddress": "0xFeatherFundingAddress1234567890abcdef1234"
+                      },
+                      "ExchangeRate": 18.92,
+                      "InputFee": 0.0003,
+                      "MaxInput": 10.5,
+                      "MinInput": 0.001,
+                      "MaxOutput": 150.0,
+                      "Example": {
+                        "InputAmount": 0.5,
+                        "InputUsd": 32716.09,
+                        "OutputAmount": 9.42,
+                        "OutputUsd": 32562.86,
+                        "Overpay": 0.0,
+                        "Warning": ""
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trade": {
+      "post": {
+        "operationId": "createTrade",
+        "summary": "Create a trade",
+        "description": "Creates a new trade. Allocates and returns a deposit address you should send funds to.",
+        "tags": ["Trading"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TradeRequest"
+              },
+              "examples": {
+                "btcToEth": {
+                  "summary": "BTC to ETH swap",
+                  "value": {
+                    "InputAsset": "BTC",
+                    "OutputAsset": "ETH",
+                    "OutputAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+                    "ReturnAddress": "bc1qreturnaddress1234567890abcdef",
+                    "MaxSlippage": 0.01
+                  }
+                },
+                "ethToBtc": {
+                  "summary": "ETH to BTC swap",
+                  "value": {
+                    "InputAsset": "ETH",
+                    "OutputAsset": "BTC",
+                    "OutputAddress": "bc1qoutputaddress1234567890abcdef",
+                    "ReturnAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+                    "MaxSlippage": 0.005
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Trade created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Trade"
+                },
+                "example": {
+                  "TradeID": "trade_abc123def456",
+                  "Created": "2026-04-01T14:30:00Z",
+                  "Expires": "2026-04-01T16:30:00Z",
+                  "InputAsset": "BTC",
+                  "OutputAsset": "ETH",
+                  "OutputAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+                  "ReturnAddress": "bc1qreturnaddress1234567890abcdef",
+                  "MaxSlippage": 0.01,
+                  "InputAddress": "bc1qdepositunique7890123456xyzabc",
+                  "MaxInput": 10.5,
+                  "QuotedPrice": 18.92,
+                  "ExecutionState": "Awaiting Deposit",
+                  "FailedAndReturned": false,
+                  "PriceInfo": {
+                    "InputAsset": {
+                      "AssetName": "BTC",
+                      "UsdMarketMid": 65432.18,
+                      "HalfSpread": 0.0012,
+                      "MarketHalfSpread": 0.0008,
+                      "HalfFee": 0.00015,
+                      "MinAmount": 0.001,
+                      "MaxOutput": 10.5,
+                      "MaxInput": 15.0,
+                      "PriceImpactRate": 0.00005,
+                      "CapacityFraction": 0.73,
+                      "TargetBalance": 20.0,
+                      "CurrentBalance": 14.6,
+                      "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+                    },
+                    "OutputAsset": {
+                      "AssetName": "ETH",
+                      "UsdMarketMid": 3456.78,
+                      "HalfSpread": 0.0008,
+                      "MarketHalfSpread": 0.0005,
+                      "HalfFee": 0.0025,
+                      "MinAmount": 0.01,
+                      "MaxOutput": 150.0,
+                      "MaxInput": 200.0,
+                      "PriceImpactRate": 0.00002,
+                      "CapacityFraction": 0.85,
+                      "TargetBalance": 200.0,
+                      "CurrentBalance": 170.0,
+                      "FundingAddress": "0xFeatherFundingAddress1234567890abcdef1234"
+                    },
+                    "ExchangeRate": 18.92,
+                    "InputFee": 0.0003,
+                    "MaxInput": 10.5,
+                    "MinInput": 0.001,
+                    "MaxOutput": 150.0
+                  },
+                  "EventLog": [
+                    "2026-04-01T14:30:00Z - Trade created",
+                    "2026-04-01T14:30:00Z - Awaiting deposit to bc1qdepositunique7890123456xyzabc"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "result": "error",
+                  "error": "Invalid output address format for ETH"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "operationId": "getStatus",
+        "summary": "Get trade status",
+        "description": "Returns the current state of a trade.",
+        "tags": ["Trading"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "trade_abc123def456"
+            },
+            "description": "Trade ID returned by POST /trade"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current trade status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Trade"
+                },
+                "examples": {
+                  "awaitingDeposit": {
+                    "summary": "Trade awaiting deposit",
+                    "value": {
+                      "TradeID": "trade_abc123def456",
+                      "Created": "2026-04-01T14:30:00Z",
+                      "Expires": "2026-04-01T16:30:00Z",
+                      "InputAsset": "BTC",
+                      "OutputAsset": "ETH",
+                      "OutputAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+                      "ReturnAddress": "bc1qreturnaddress1234567890abcdef",
+                      "MaxSlippage": 0.01,
+                      "InputAddress": "bc1qdepositunique7890123456xyzabc",
+                      "MaxInput": 10.5,
+                      "QuotedPrice": 18.92,
+                      "ExecutionState": "Awaiting Deposit",
+                      "FailedAndReturned": false,
+                      "PriceInfo": {
+                        "InputAsset": {
+                          "AssetName": "BTC",
+                          "UsdMarketMid": 65432.18,
+                          "HalfSpread": 0.0012,
+                          "MarketHalfSpread": 0.0008,
+                          "HalfFee": 0.00015,
+                          "MinAmount": 0.001,
+                          "MaxOutput": 10.5,
+                          "MaxInput": 15.0,
+                          "PriceImpactRate": 0.00005,
+                          "CapacityFraction": 0.73,
+                          "TargetBalance": 20.0,
+                          "CurrentBalance": 14.6,
+                          "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+                        },
+                        "OutputAsset": {
+                          "AssetName": "ETH",
+                          "UsdMarketMid": 3456.78,
+                          "HalfSpread": 0.0008,
+                          "MarketHalfSpread": 0.0005,
+                          "HalfFee": 0.0025,
+                          "MinAmount": 0.01,
+                          "MaxOutput": 150.0,
+                          "MaxInput": 200.0,
+                          "PriceImpactRate": 0.00002,
+                          "CapacityFraction": 0.85,
+                          "TargetBalance": 200.0,
+                          "CurrentBalance": 170.0,
+                          "FundingAddress": "0xFeatherFundingAddress1234567890abcdef1234"
+                        },
+                        "ExchangeRate": 18.92,
+                        "InputFee": 0.0003,
+                        "MaxInput": 10.5,
+                        "MinInput": 0.001,
+                        "MaxOutput": 150.0
+                      },
+                      "EventLog": [
+                        "2026-04-01T14:30:00Z - Trade created",
+                        "2026-04-01T14:30:00Z - Awaiting deposit to bc1qdepositunique7890123456xyzabc"
+                      ]
+                    }
+                  },
+                  "finalized": {
+                    "summary": "Completed trade",
+                    "value": {
+                      "TradeID": "trade_abc123def456",
+                      "Created": "2026-04-01T14:30:00Z",
+                      "Expires": "2026-04-01T16:30:00Z",
+                      "Deposited": "2026-04-01T14:35:22Z",
+                      "Sent": "2026-04-01T14:37:15Z",
+                      "Finalized": "2026-04-01T14:45:30Z",
+                      "InputAsset": "BTC",
+                      "OutputAsset": "ETH",
+                      "OutputAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+                      "ReturnAddress": "bc1qreturnaddress1234567890abcdef",
+                      "MaxSlippage": 0.01,
+                      "InputAddress": "bc1qdepositunique7890123456xyzabc",
+                      "MaxInput": 10.5,
+                      "QuotedPrice": 18.92,
+                      "ExecutionState": "Finalized",
+                      "FailedAndReturned": false,
+                      "InputTxId": "abc123inputtransaction456def789",
+                      "OutputTxId": "0xoutputtransaction1234567890abcdef",
+                      "PriceInfo": {
+                        "InputAsset": {
+                          "AssetName": "BTC",
+                          "UsdMarketMid": 65432.18,
+                          "HalfSpread": 0.0012,
+                          "MarketHalfSpread": 0.0008,
+                          "HalfFee": 0.00015,
+                          "MinAmount": 0.001,
+                          "MaxOutput": 10.5,
+                          "MaxInput": 15.0,
+                          "PriceImpactRate": 0.00005,
+                          "CapacityFraction": 0.73,
+                          "TargetBalance": 20.0,
+                          "CurrentBalance": 14.6,
+                          "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+                        },
+                        "OutputAsset": {
+                          "AssetName": "ETH",
+                          "UsdMarketMid": 3456.78,
+                          "HalfSpread": 0.0008,
+                          "MarketHalfSpread": 0.0005,
+                          "HalfFee": 0.0025,
+                          "MinAmount": 0.01,
+                          "MaxOutput": 150.0,
+                          "MaxInput": 200.0,
+                          "PriceImpactRate": 0.00002,
+                          "CapacityFraction": 0.85,
+                          "TargetBalance": 200.0,
+                          "CurrentBalance": 170.0,
+                          "FundingAddress": "0xFeatherFundingAddress1234567890abcdef1234"
+                        },
+                        "ExchangeRate": 18.92,
+                        "InputFee": 0.0003,
+                        "MaxInput": 10.5,
+                        "MinInput": 0.001,
+                        "MaxOutput": 150.0
+                      },
+                      "Executed": {
+                        "InputAmount": 0.5,
+                        "InputUsd": 32716.09,
+                        "OutputAmount": 9.42,
+                        "OutputUsd": 32562.86,
+                        "Overpay": 0.0,
+                        "Warning": ""
+                      },
+                      "EventLog": [
+                        "2026-04-01T14:30:00Z - Trade created",
+                        "2026-04-01T14:30:00Z - Awaiting deposit to bc1qdepositunique7890123456xyzabc",
+                        "2026-04-01T14:35:22Z - Deposit detected: 0.5 BTC",
+                        "2026-04-01T14:37:15Z - Output sent: 9.42 ETH",
+                        "2026-04-01T14:45:30Z - Trade finalized"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Trade not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "result": "error",
+                  "error": "Trade not found: trade_xyz789invalid"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssetPrice": {
+        "type": "object",
+        "example": {
+          "AssetName": "BTC",
+          "UsdMarketMid": 65432.18,
+          "HalfSpread": 0.0012,
+          "MarketHalfSpread": 0.0008,
+          "HalfFee": 0.00015,
+          "MinAmount": 0.001,
+          "MaxOutput": 10.5,
+          "MaxInput": 15.0,
+          "PriceImpactRate": 0.00005,
+          "CapacityFraction": 0.73,
+          "TargetBalance": 20.0,
+          "CurrentBalance": 14.6,
+          "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+        },
+        "properties": {
+          "AssetName": {
+            "type": "string",
+            "description": "Asset identifier (e.g. \"BTC\")",
+            "example": "BTC"
+          },
+          "UsdMarketMid": {
+            "type": "number",
+            "format": "float",
+            "description": "Current USD mid-market price",
+            "example": 65432.18
+          },
+          "HalfSpread": {
+            "type": "number",
+            "format": "float",
+            "description": "Half the bid-ask spread applied to trades"
+          },
+          "MarketHalfSpread": {
+            "type": "number",
+            "format": "float",
+            "description": "External market half-spread for reference"
+          },
+          "HalfFee": {
+            "type": "number",
+            "format": "float",
+            "description": "Estimated half of the on-chain fee in asset units"
+          },
+          "MinAmount": {
+            "type": "number",
+            "format": "float",
+            "description": "Minimum deposit amount Feather will process"
+          },
+          "MaxOutput": {
+            "type": "number",
+            "format": "float",
+            "description": "Maximum amount Feather will pay out of this asset"
+          },
+          "MaxInput": {
+            "type": "number",
+            "format": "float",
+            "description": "Maximum amount Feather will accept as input"
+          },
+          "PriceImpactRate": {
+            "type": "number",
+            "format": "float",
+            "description": "λ — rate of price adjustment per unit traded"
+          },
+          "CapacityFraction": {
+            "type": "number",
+            "format": "float",
+            "description": "Current balance as a fraction of target"
+          },
+          "TargetBalance": {
+            "type": "number",
+            "format": "float",
+            "description": "Target balance in asset units"
+          },
+          "CurrentBalance": {
+            "type": "number",
+            "format": "float",
+            "description": "Current liquid balance in asset units"
+          },
+          "FundingAddress": {
+            "type": "string",
+            "description": "Feather's main address for this asset (for funding/monitoring)"
+          }
+        },
+        "required": ["AssetName", "UsdMarketMid", "HalfSpread", "MarketHalfSpread", "HalfFee", "MinAmount", "MaxOutput", "MaxInput", "PriceImpactRate", "CapacityFraction", "TargetBalance", "CurrentBalance", "FundingAddress"]
+      },
+      "PriceInfo": {
+        "type": "object",
+        "example": {
+          "InputAsset": {
+            "AssetName": "BTC",
+            "UsdMarketMid": 65432.18,
+            "HalfSpread": 0.0012,
+            "MarketHalfSpread": 0.0008,
+            "HalfFee": 0.00015,
+            "MinAmount": 0.001,
+            "MaxOutput": 10.5,
+            "MaxInput": 15.0,
+            "PriceImpactRate": 0.00005,
+            "CapacityFraction": 0.73,
+            "TargetBalance": 20.0,
+            "CurrentBalance": 14.6,
+            "FundingAddress": "bc1qfeatherfundingaddress1234567890abcdef"
+          },
+          "OutputAsset": {
+            "AssetName": "ETH",
+            "UsdMarketMid": 3456.78,
+            "HalfSpread": 0.0008,
+            "MarketHalfSpread": 0.0005,
+            "HalfFee": 0.0025,
+            "MinAmount": 0.01,
+            "MaxOutput": 150.0,
+            "MaxInput": 200.0,
+            "PriceImpactRate": 0.00002,
+            "CapacityFraction": 0.85,
+            "TargetBalance": 200.0,
+            "CurrentBalance": 170.0,
+            "FundingAddress": "0xFeatherFundingAddress1234567890abcdef1234"
+          },
+          "ExchangeRate": 18.92,
+          "InputFee": 0.0003,
+          "MaxInput": 10.5,
+          "MinInput": 0.001,
+          "MaxOutput": 150.0
+        },
+        "properties": {
+          "InputAsset": {
+            "$ref": "#/components/schemas/AssetPrice"
+          },
+          "OutputAsset": {
+            "$ref": "#/components/schemas/AssetPrice"
+          },
+          "ExchangeRate": {
+            "type": "number",
+            "format": "float",
+            "description": "Output units per input unit at the current mid-price",
+            "example": 18.92
+          },
+          "InputFee": {
+            "type": "number",
+            "format": "float",
+            "description": "On-chain fee deducted from your deposit before exchange",
+            "example": 0.0003
+          },
+          "MaxInput": {
+            "type": "number",
+            "format": "float",
+            "description": "Maximum deposit Feather will accept on this route right now",
+            "example": 10.5
+          },
+          "MinInput": {
+            "type": "number",
+            "format": "float",
+            "description": "Minimum deposit Feather will process",
+            "example": 0.001
+          },
+          "MaxOutput": {
+            "type": "number",
+            "format": "float",
+            "description": "Maximum Feather will pay out",
+            "example": 150.0
+          },
+          "Example": {
+            "$ref": "#/components/schemas/ExecutedTrade",
+            "description": "Present if input_amount or output_amount was supplied"
+          }
+        },
+        "required": ["InputAsset", "OutputAsset", "ExchangeRate", "InputFee", "MaxInput", "MinInput", "MaxOutput"]
+      },
+      "ExecutedTrade": {
+        "type": "object",
+        "example": {
+          "InputAmount": 0.5,
+          "InputUsd": 32716.09,
+          "OutputAmount": 9.42,
+          "OutputUsd": 32562.86,
+          "Overpay": 0.0,
+          "Warning": ""
+        },
+        "properties": {
+          "InputAmount": {
+            "type": "number",
+            "format": "float",
+            "description": "Input amount used in the calculation",
+            "example": 0.5
+          },
+          "InputUsd": {
+            "type": "number",
+            "format": "float",
+            "description": "USD value of the input",
+            "example": 32716.09
+          },
+          "OutputAmount": {
+            "type": "number",
+            "format": "float",
+            "description": "Expected output amount",
+            "example": 9.42
+          },
+          "OutputUsd": {
+            "type": "number",
+            "format": "float",
+            "description": "USD value of the output",
+            "example": 32562.86
+          },
+          "Overpay": {
+            "type": "number",
+            "format": "float",
+            "description": "Amount exceeding the cap that would be returned",
+            "example": 0.0
+          },
+          "Warning": {
+            "type": "string",
+            "description": "Describes why execution would be degraded",
+            "example": ""
+          }
+        },
+        "required": ["InputAmount", "InputUsd", "OutputAmount", "OutputUsd"]
+      },
+      "TradeRequest": {
+        "type": "object",
+        "example": {
+          "InputAsset": "BTC",
+          "OutputAsset": "ETH",
+          "OutputAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+          "ReturnAddress": "bc1qreturnaddress1234567890abcdef",
+          "MaxSlippage": 0.01
+        },
+        "properties": {
+          "InputAsset": {
+            "type": "string",
+            "description": "Asset you are sending (e.g. \"BTC\")",
+            "example": "BTC"
+          },
+          "OutputAsset": {
+            "type": "string",
+            "description": "Asset you want to receive (e.g. \"ETH\")",
+            "example": "ETH"
+          },
+          "OutputAddress": {
+            "type": "string",
+            "description": "Address on the output chain to receive funds",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          "ReturnAddress": {
+            "type": "string",
+            "description": "Address on the input chain to refund to if execution fails",
+            "example": "bc1qreturnaddress1234567890abcdef"
+          },
+          "MaxSlippage": {
+            "type": "number",
+            "format": "float",
+            "description": "Maximum acceptable rate degradation as a fraction (e.g. 0.01 = 1%). Default 0 = no limit.",
+            "example": 0.01
+          }
+        },
+        "required": ["InputAsset", "OutputAsset", "OutputAddress"]
+      },
+      "Trade": {
+        "type": "object",
+        "example": {
+          "TradeID": "trade_abc123def456",
+          "Created": "2026-04-01T14:30:00Z",
+          "Expires": "2026-04-01T16:30:00Z",
+          "Deposited": "2026-04-01T14:35:22Z",
+          "Sent": "2026-04-01T14:37:15Z",
+          "Finalized": "2026-04-01T14:45:30Z",
+          "InputAsset": "BTC",
+          "OutputAsset": "ETH",
+          "OutputAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+          "ReturnAddress": "bc1qreturnaddress1234567890abcdef",
+          "MaxSlippage": 0.01,
+          "InputAddress": "bc1qdepositunique7890123456xyzabc",
+          "MaxInput": 10.5,
+          "QuotedPrice": 18.92,
+          "ExecutionState": "Finalized",
+          "FailedAndReturned": false,
+          "InputTxId": "abc123inputtransaction456def789",
+          "OutputTxId": "0xoutputtransaction1234567890abcdef",
+          "EventLog": [
+            "2026-04-01T14:30:00Z - Trade created",
+            "2026-04-01T14:30:00Z - Awaiting deposit to bc1qdepositunique7890123456xyzabc",
+            "2026-04-01T14:35:22Z - Deposit detected: 0.5 BTC",
+            "2026-04-01T14:37:15Z - Output sent: 9.42 ETH",
+            "2026-04-01T14:45:30Z - Trade finalized"
+          ]
+        },
+        "properties": {
+          "TradeID": {
+            "type": "string",
+            "description": "Unique trade identifier",
+            "example": "trade_abc123def456"
+          },
+          "Created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the trade was created",
+            "example": "2026-04-01T14:30:00Z"
+          },
+          "Expires": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the trade expires if no deposit arrives (2 hours after creation)",
+            "example": "2026-04-01T16:30:00Z"
+          },
+          "Deposited": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the deposit was confirmed (omitted until then)",
+            "example": "2026-04-01T14:35:22Z"
+          },
+          "Sent": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the output transaction was broadcast (omitted until then)",
+            "example": "2026-04-01T14:37:15Z"
+          },
+          "Finalized": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the trade completed (omitted until then)",
+            "example": "2026-04-01T14:45:30Z"
+          },
+          "InputAsset": {
+            "type": "string",
+            "description": "Asset being sent",
+            "example": "BTC"
+          },
+          "OutputAsset": {
+            "type": "string",
+            "description": "Asset being received",
+            "example": "ETH"
+          },
+          "OutputAddress": {
+            "type": "string",
+            "description": "Address to receive output funds",
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+          },
+          "ReturnAddress": {
+            "type": "string",
+            "description": "Address for refunds if execution fails",
+            "example": "bc1qreturnaddress1234567890abcdef"
+          },
+          "MaxSlippage": {
+            "type": "number",
+            "format": "float",
+            "description": "Maximum acceptable slippage",
+            "example": 0.01
+          },
+          "InputAddress": {
+            "type": "string",
+            "description": "Unique deposit address for this trade",
+            "example": "bc1qdepositunique7890123456xyzabc"
+          },
+          "MaxInput": {
+            "type": "number",
+            "format": "float",
+            "description": "Maximum deposit amount Feather will accept",
+            "example": 10.5
+          },
+          "QuotedPrice": {
+            "type": "number",
+            "format": "float",
+            "description": "Exchange rate at creation time",
+            "example": 18.92
+          },
+          "ExecutionState": {
+            "type": "string",
+            "description": "Current state of the trade (e.g. \"Awaiting Deposit\", \"Finalized\", \"Expired\")",
+            "example": "Finalized"
+          },
+          "FailedAndReturned": {
+            "type": "boolean",
+            "description": "true if the trade failed and funds are being returned",
+            "example": false
+          },
+          "InputTxId": {
+            "type": "string",
+            "description": "Transaction ID of your deposit (once detected)",
+            "example": "abc123inputtransaction456def789"
+          },
+          "OutputTxId": {
+            "type": "string",
+            "description": "Transaction ID of Feather's outgoing payment (once sent)",
+            "example": "0xoutputtransaction1234567890abcdef"
+          },
+          "PriceInfo": {
+            "$ref": "#/components/schemas/PriceInfo"
+          },
+          "Executed": {
+            "$ref": "#/components/schemas/ExecutedTrade",
+            "description": "Actual execution details (present once deposit confirmed)"
+          },
+          "EventLog": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "2026-04-01T14:30:00Z - Trade created"
+            },
+            "description": "Timestamped log of state transitions and notable events",
+            "example": [
+              "2026-04-01T14:30:00Z - Trade created",
+              "2026-04-01T14:30:00Z - Awaiting deposit to bc1qdepositunique7890123456xyzabc",
+              "2026-04-01T14:35:22Z - Deposit detected: 0.5 BTC",
+              "2026-04-01T14:37:15Z - Output sent: 9.42 ETH",
+              "2026-04-01T14:45:30Z - Trade finalized"
+            ]
+          }
+        },
+        "required": ["TradeID", "Created", "Expires", "InputAsset", "OutputAsset", "OutputAddress", "InputAddress", "MaxInput", "QuotedPrice", "ExecutionState", "PriceInfo"]
+      },
+      "Error": {
+        "type": "object",
+        "example": {
+          "result": "error",
+          "error": "Invalid output address format for ETH"
+        },
+        "properties": {
+          "result": {
+            "type": "string",
+            "enum": ["error"],
+            "example": "error"
+          },
+          "error": {
+            "type": "string",
+            "description": "Description of the error",
+            "example": "Invalid output address format for ETH"
+          }
+        },
+        "required": ["result", "error"]
+      }
+    }
+  }
+}

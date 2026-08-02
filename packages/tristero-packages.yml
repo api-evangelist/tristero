@@ -1,0 +1,41 @@
+generated: '2026-07-21'
+method: searched
+source: https://pypi.org/project/tristero/ + https://www.npmjs.com/package/tristero
+description: >-
+  First-party client libraries for the Tristero cross-chain trading platform.
+  The Python SDK is the install path the official docs teach
+  (https://docs.tristero.com/docs/tristero/python-sdk); the npm package is the
+  TypeScript SDK for the Tristero v3 backend, published by a tristero.com
+  maintainer.
+packages:
+- language: python
+  registry: pypi
+  name: tristero
+  url: https://pypi.org/project/tristero/
+  install: pip install tristero
+  version: 0.4.2
+  requires_python: '>=3.10'
+  summary: Library for trading on Tristero
+  official: true
+  evidence: >-
+    Documented as the official SDK at
+    https://docs.tristero.com/docs/tristero/python-sdk (pip/poetry/uv install
+    instructions and PyPI badge link to this package).
+- language: typescript
+  registry: npm
+  name: tristero
+  url: https://www.npmjs.com/package/tristero
+  install: npm install tristero
+  version: 3.0.0-beta.4
+  summary: >-
+    TypeScript SDK for the Tristero v3 backend. Thin async transport over the
+    HTTP/WS surface plus an ergonomic client handling symbol resolution,
+    units, signing, and lifecycle.
+  official: true
+  evidence: npm maintainer dnagy_tristero <dnagy@tristero.com> (tristero.com domain).
+- language: typescript
+  registry: github
+  name: tristeroresearch/mach-sdk
+  url: https://github.com/tristeroresearch/mach-sdk
+  summary: TypeScript SDK for Mach, Tristero's earlier cross-chain swap product (GitHub only, not on npm).
+  official: true

@@ -1,22 +1,242 @@
 aid: tristero
 name: Tristero
-description: Tristero is a company surfaced as a portfolio company of general-catalyst and added to the
-  API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Tristero is a trustless, cross-chain trading protocol backed by General
+  Catalyst. On-chain traders use its API and Python/TypeScript SDKs to access
+  deep liquidity across DEXs and CEXs for spot swaps of ERC-20 tokens across
+  EVM chains (via Permit2 / EIP-712 signed orders), leveraged margin positions
+  up to 10x, and cross-VM swaps into non-EVM assets like Bitcoin, Monero, and
+  Litecoin through its Feather balance-sheet swap relay. Execution is
+  non-custodial and MEV-protected, with real-time quote streaming over
+  WebSocket, and the company's research roots are in on-chain dark pools and
+  encrypted order matching.
 url: https://raw.githubusercontent.com/api-evangelist/tristero/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://docs.tristero.com/tristero.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - general-catalyst
-x-tier: stub
-x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- Cryptocurrency
+- Trading
+- DeFi
+- Cross-Chain
+- Web3
+- Margin Trading
+- Dark Pools
+apis:
+- aid: tristero:tristero-assets-api
+  name: Tristero Assets API
+  description: The Assets API from Tristero — 1 operation(s) for assets.
+  humanURL: https://docs.tristero.com/docs/tristero
+  baseURL: https://api.tristero.com/v2
+  tags:
+  - Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/tristero-assets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tristero.com/docs/tristero
+  - type: APIReference
+    url: https://docs.tristero.com/docs/tristero/api/getQuote
+  - type: Documentation
+    url: https://docs.tristero.com/docs/feather
+  - type: APIReference
+    url: https://docs.tristero.com/docs/feather/api/getAssets
+  - type: GettingStarted
+    url: https://docs.tristero.com/docs/feather/quickstart
+- aid: tristero:tristero-margin-api
+  name: Tristero Margin API
+  description: Margin position management
+  humanURL: https://docs.tristero.com/docs/tristero
+  baseURL: https://api.tristero.com/v2
+  tags:
+  - Margin
+  properties:
+  - type: OpenAPI
+    url: openapi/tristero-margin-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tristero.com/docs/tristero
+  - type: APIReference
+    url: https://docs.tristero.com/docs/tristero/api/getQuote
+  - type: Documentation
+    url: https://docs.tristero.com/docs/feather
+  - type: APIReference
+    url: https://docs.tristero.com/docs/feather/api/getAssets
+  - type: GettingStarted
+    url: https://docs.tristero.com/docs/feather/quickstart
+- aid: tristero:tristero-orders-api
+  name: Tristero Orders API
+  description: Submit and manage orders
+  humanURL: https://docs.tristero.com/docs/tristero
+  baseURL: https://api.tristero.com/v2
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/tristero-orders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tristero.com/docs/tristero
+  - type: APIReference
+    url: https://docs.tristero.com/docs/tristero/api/getQuote
+  - type: Documentation
+    url: https://docs.tristero.com/docs/feather
+  - type: APIReference
+    url: https://docs.tristero.com/docs/feather/api/getAssets
+  - type: GettingStarted
+    url: https://docs.tristero.com/docs/feather/quickstart
+- aid: tristero:tristero-pricing-api
+  name: Tristero Pricing API
+  description: The Pricing API from Tristero — 1 operation(s) for pricing.
+  humanURL: https://docs.tristero.com/docs/tristero
+  baseURL: https://api.tristero.com/v2
+  tags:
+  - Pricing
+  properties:
+  - type: OpenAPI
+    url: openapi/tristero-pricing-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tristero.com/docs/tristero
+  - type: APIReference
+    url: https://docs.tristero.com/docs/tristero/api/getQuote
+  - type: Documentation
+    url: https://docs.tristero.com/docs/feather
+  - type: APIReference
+    url: https://docs.tristero.com/docs/feather/api/getAssets
+  - type: GettingStarted
+    url: https://docs.tristero.com/docs/feather/quickstart
+- aid: tristero:tristero-quotes-api
+  name: Tristero Quotes API
+  description: Request quotes for swaps and margin positions
+  humanURL: https://docs.tristero.com/docs/tristero
+  baseURL: https://api.tristero.com/v2
+  tags:
+  - Quotes
+  properties:
+  - type: OpenAPI
+    url: openapi/tristero-quotes-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tristero.com/docs/tristero
+  - type: APIReference
+    url: https://docs.tristero.com/docs/tristero/api/getQuote
+  - type: Documentation
+    url: https://docs.tristero.com/docs/feather
+  - type: APIReference
+    url: https://docs.tristero.com/docs/feather/api/getAssets
+  - type: GettingStarted
+    url: https://docs.tristero.com/docs/feather/quickstart
+- aid: tristero:tristero-trading-api
+  name: Tristero Trading API
+  description: The Trading API from Tristero — 2 operation(s) for trading.
+  humanURL: https://docs.tristero.com/docs/tristero
+  baseURL: https://api.tristero.com/v2
+  tags:
+  - Trading
+  properties:
+  - type: OpenAPI
+    url: openapi/tristero-trading-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tristero.com/docs/tristero
+  - type: APIReference
+    url: https://docs.tristero.com/docs/tristero/api/getQuote
+  - type: Documentation
+    url: https://docs.tristero.com/docs/feather
+  - type: APIReference
+    url: https://docs.tristero.com/docs/feather/api/getAssets
+  - type: GettingStarted
+    url: https://docs.tristero.com/docs/feather/quickstart
+- aid: tristero:tristero-wallets-api
+  name: Tristero Wallets API
+  description: Wallet and position queries
+  humanURL: https://docs.tristero.com/docs/tristero
+  baseURL: https://api.tristero.com/v2
+  tags:
+  - Wallets
+  properties:
+  - type: OpenAPI
+    url: openapi/tristero-wallets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tristero.com/docs/tristero
+  - type: APIReference
+    url: https://docs.tristero.com/docs/tristero/api/getQuote
+  - type: Documentation
+    url: https://docs.tristero.com/docs/feather
+  - type: APIReference
+    url: https://docs.tristero.com/docs/feather/api/getAssets
+  - type: GettingStarted
+    url: https://docs.tristero.com/docs/feather/quickstart
+common:
+- type: DomainSecurity
+  url: security/tristero-domain-security.yml
+- type: Authentication
+  url: authentication/tristero-authentication.yml
+- url: https://tristero.com
+  type: Website
+- url: https://docs.tristero.com
+  type: DeveloperPortal
+- url: https://docs.tristero.com/docs/tristero
+  type: Documentation
+- url: https://docs.tristero.com/docs/tristero/api/getQuote
+  type: APIReference
+- url: https://docs.tristero.com/docs/feather/quickstart
+  type: GettingStarted
+- url: https://tristero.substack.com/
+  type: Blog
+- url: https://github.com/tristeroresearch
+  type: GitHubOrganization
+- url: https://app.tristero.com
+  type: Login
+- url: mailto:outreach@tristero.com
+  type: Support
+- url: https://x.com/0xtristero
+  type: Twitter
+- url: packages/tristero-packages.yml
+  type: Packages
+- url: packages/tristero-packages.yml
+  type: SDKs
+- url: well-known/tristero-well-known.yml
+  type: WellKnown
+- url: mcp/tristero-mcp.yml
+  type: MCPServer
+- url: llms/tristero-llms.txt
+  type: LLMsTxt
+- url: conformance/tristero-conformance.yml
+  type: Conformance
+- url: errors/tristero-problem-types.yml
+  type: ErrorCatalog
+- url: lifecycle/tristero-lifecycle.yml
+  type: Lifecycle
+- url: sandbox/tristero-sandbox.yml
+  type: Sandbox
+- url: conventions/tristero-conventions.yml
+  type: Conventions
+- url: data-model/tristero-data-model.yml
+  type: DataModel
+- url: skills/_index.yml
+  type: AgentSkill
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 20
+  pass: local-v1

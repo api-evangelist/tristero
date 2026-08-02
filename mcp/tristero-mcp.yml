@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/tristero-api-openapi.json + openapi/tristero-feather-api-openapi.json
+description: >-
+  No official Tristero MCP server was found (no MCP mention in
+  docs.tristero.com, no @tristero/* or tristero MCP package on npm, none of
+  the tristeroresearch GitHub repos ship one). This is a CANDIDATE tool list
+  derived from the two published OpenAPI specs - one tool per operationId -
+  for a server Tristero (or the network) could stand up.
+server:
+  name: tristero
+  transport: http
+tools:
+- name: getQuote
+  description: Get a spot swap quote for a cross-chain swap; returns order parameters that can be signed and submitted.
+  source_operation: openapi/tristero-api-openapi.json#getQuote
+- name: fillOrder
+  description: Submit a signed order for execution (spot swaps, margin positions, and feather swaps).
+  source_operation: openapi/tristero-api-openapi.json#fillOrder
+- name: getMarginQuote
+  description: Get a quote for opening a leveraged margin position; any token can be used as collateral.
+  source_operation: openapi/tristero-api-openapi.json#getMarginQuote
+- name: getMarginPosition
+  description: Get details of a specific margin position by ID.
+  source_operation: openapi/tristero-api-openapi.json#getMarginPosition
+- name: getMarginPositions
+  description: List all margin positions for a wallet address.
+  source_operation: openapi/tristero-api-openapi.json#getMarginPositions
+- name: closeMarginPosition
+  description: Submit a signed request to close a margin position, partially or fully, with cash or swap settlement.
+  source_operation: openapi/tristero-api-openapi.json#closeMarginPosition
+- name: getAssets
+  description: List assets supported by the Feather cross-VM relay with current market prices and liquidity.
+  source_operation: openapi/tristero-feather-api-openapi.json#getAssets
+- name: getPrice
+  description: Get a live Feather price quote for a swap between two assets.
+  source_operation: openapi/tristero-feather-api-openapi.json#getPrice
+- name: createTrade
+  description: Create a Feather trade; allocates and returns a deposit address to send funds to.
+  source_operation: openapi/tristero-feather-api-openapi.json#createTrade
+- name: getStatus
+  description: Get the current state of a Feather trade.
+  source_operation: openapi/tristero-feather-api-openapi.json#getStatus

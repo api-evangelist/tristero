@@ -1,0 +1,19 @@
+generated: '2026-07-21'
+method: generated
+description: >-
+  Packaged Agent Skills for Tristero's marquee flows, grounded in the
+  operationIds of the two published OpenAPI specs and the conventions
+  captured in conventions/ and errors/.
+skills:
+- file: tristero-spot-swap.md
+  name: Execute a cross-chain spot swap on Tristero
+  api: openapi/tristero-api-openapi.json
+  operations: [getQuote, fillOrder]
+- file: tristero-margin-position.md
+  name: Open, inspect, and close a margin position on Tristero
+  api: openapi/tristero-api-openapi.json
+  operations: [getMarginQuote, fillOrder, getMarginPositions, getMarginPosition, closeMarginPosition]
+- file: tristero-feather-swap.md
+  name: Swap into non-EVM assets with Feather
+  api: openapi/tristero-feather-api-openapi.json
+  operations: [getAssets, getPrice, createTrade, getStatus]

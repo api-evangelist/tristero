@@ -1,0 +1,31 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tristero-api-openapi.json servers[] + https://docs.tristero.com/docs/tristero/python-sdk/configuration
+description: >-
+  Lifecycle posture derived from the published specs and docs. The Tristero
+  API versions in the URI path (current v2; the npm TypeScript SDK targets a
+  v3 backend in beta). A staging environment is published alongside
+  production. No status page, SLA, changelog, or deprecation policy is
+  published, and no operations are marked deprecated - so no StatusPage or
+  Deprecation pointers are emitted.
+versioning:
+  scheme: uri-path
+  current: v2
+  evidence: >-
+    servers https://api.tristero.com/v2 and https://staging-api.tristero.com/v2;
+    npm package "tristero" 3.0.0-beta.4 describes itself as the SDK for the
+    "Tristero v3 backend", indicating v3 is in progress.
+environments:
+- name: PRODUCTION
+  url: https://api.tristero.com/v2
+- name: STAGING
+  url: https://staging-api.tristero.com/v2
+- name: LOCAL
+  url: http://localhost:8060 (Quoter) / http://localhost:8070 (Filler)
+deprecation:
+  policy_url: null
+  sunset_header: false
+sla: null
+status_page: null
+changelog: null
+deprecated_operations: []

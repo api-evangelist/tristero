@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/tristero-api-openapi.json,
+  openapi/tristero-feather-api-openapi.json, the docs at
+  https://docs.tristero.com, and live /.well-known/ probes
+  (well-known/tristero-well-known.yml). Tristero publishes no compliance /
+  certification program, so no Compliance pointer is emitted.
+standards:
+- id: oauth2
+  conforms: false
+  evidence: securitySchemes are apiKey (X-API-Key header) on the Tristero API and none on Feather; no oauth2 flows in either spec.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404 on all five hosts; no openIdConnect scheme in the specs.
+- id: fapi
+  conforms: false
+- id: mtls
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Error bodies are custom application/json envelopes - {error, detail} on
+    the Tristero API (ErrorResponse) and {result: "error", error} on Feather
+    (Error) - not application/problem+json.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset/Deprecation headers or deprecation policy documented.
+- id: eip-712
+  conforms: true
+  evidence: orders are EIP-712 typed-data signatures (EIP712Domain, PermitWitnessTransferFrom, TokenPermissions, SignedOrder schemas in openapi/tristero-api-openapi.json).
+- id: permit2
+  conforms: true
+  evidence: spot swaps use Uniswap Permit2 gasless approvals (Permit2OrderSubmission schema; docs "swap any ERC-20 token across supported EVM chains using Permit2 signatures").
+- id: idempotency
+  conforms: false
+  evidence: no idempotency-key header or parameter in either spec and none documented.
+- id: pagination
+  conforms: false
+  evidence: no pagination parameters in either spec (list endpoints return full result sets).
+- id: websocket-streaming
+  conforms: true
+  evidence: real-time quote streaming over WebSocket (~500ms updates) documented at https://docs.tristero.com/docs/tristero/python-sdk/websocket-streaming.

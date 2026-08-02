@@ -1,0 +1,26 @@
+# API Evangelist enhancements for the Tristero API (generated 2026-07-21, method: generated)
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Tristero API
+  version: 1.0.0
+extends: openapi/tristero-api-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist:
+      provider: tristero
+      harvested: '2026-07-21'
+      source: https://raw.githubusercontent.com/tristeroresearch/tristero-docs/main/tristero-openapi.json
+      notes: >-
+        Spec published in the tristeroresearch/tristero-docs repo and rendered
+        at https://docs.tristero.com/docs/tristero/api/getQuote. Orders are
+        Permit2 / EIP-712 signed; real-time quote and order updates stream
+        over WebSocket (~500ms) via the Python SDK's subscribe_quotes.
+- target: $.info
+  update:
+    x-artifacts:
+      authentication: authentication/tristero-authentication.yml
+      errors: errors/tristero-problem-types.yml
+      conventions: conventions/tristero-conventions.yml
+      sandbox: sandbox/tristero-sandbox.yml
+      dataModel: data-model/tristero-data-model.yml

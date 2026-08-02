@@ -1,0 +1,34 @@
+# Docs
+
+- Feather: Permissionless cross-chain swap relay documentation
+  - [Feather Overview](/docs/feather): Permissionless cross-chain swap relay primarily for connecting non-EVM cryptocurrency chains
+  - [Quickstart](/docs/feather/quickstart): How to make your first Feather trade
+  - Concepts: undefined
+    - [Liquidity and Returns](/docs/feather/concepts/liquidity): How Feather handles hitting liquidity limits
+    - [Pricing Model](/docs/feather/concepts/pricing): Feather's pricing model
+    - [Trade State Machine](/docs/feather/concepts/states): The different states the system can be in and their transitions
+  - API Reference: Feather API endpoints and usage
+    - [List supported assets](/docs/feather/api/getAssets): Returns the list of supported assets and their current market prices and liquidity information.
+    - [Get price quote](/docs/feather/api/getPrice): Returns a live price quote for a swap between two assets. Optionally computes a worked example for a specific input or output amount.
+    - [Create a trade](/docs/feather/api/createTrade): Creates a new trade. Allocates and returns a deposit address you should send funds to.
+    - [Get trade status](/docs/feather/api/getStatus): Returns the current state of a trade.
+  - [Supported Assets](/docs/feather/supported-assets): List of assets currently supported to be traded via Feather
+- Tristero: Tristero trading library documentation
+  - [Tristero Introduction](/docs/tristero): Cross-chain trading API for spot swaps, margin positions, and non-EVM asset exchanges
+  - [How We Get the Best Price](/docs/tristero/execution): Tristero's trade simulations enable world class trade execution
+  - Python SDK: Python SDK for the Tristero trading library
+    - [Overview](/docs/tristero/python-sdk): Tristero Python SDK overview and installation
+    - [Spot Swaps](/docs/tristero/python-sdk/spot-swaps): Execute spot swaps with Permit2
+    - [Margin Trading](/docs/tristero/python-sdk/margin-trading): Open and manage leveraged positions
+    - [Feather Swaps](/docs/tristero/python-sdk/feather-swaps): Deposit-based swaps for UTXO-based chains
+    - [WebSocket Streaming](/docs/tristero/python-sdk/websocket-streaming): Real-time quote streaming and limit orders
+    - [Configuration](/docs/tristero/python-sdk/configuration): Environment configuration for the Python SDK
+    - Examples: Example code and use cases
+      - [Complete Examples](/docs/tristero/python-sdk/examples): Complete runnable example scripts
+  - API Reference: Tristero API endpoints and usage
+    - [Get a spot swap quote](/docs/tristero/api/getQuote): Request a quote for a cross-chain spot swap. Returns order parameters that can be signed and submitted.
+    - [Submit an order](/docs/tristero/api/fillOrder): Submit a signed order for execution. Supports spot swaps, margin positions, and feather swaps.
+    - [Get a margin quote](/docs/tristero/api/getMarginQuote): Request a quote for opening a leveraged margin position. Any token can be used as collateral.
+    - [Get margin position](/docs/tristero/api/getMarginPosition): Get details of a specific margin position by ID.
+    - [List margin positions](/docs/tristero/api/getMarginPositions): Get all margin positions for a wallet address.
+    - [Close a margin position](/docs/tristero/api/closeMarginPosition): Submit a signed request to close a margin position. Can close partially or fully, with cash settlement or swap settlement.

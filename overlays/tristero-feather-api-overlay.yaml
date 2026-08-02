@@ -1,0 +1,25 @@
+# API Evangelist enhancements for the Feather API (generated 2026-07-21, method: generated)
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Tristero Feather API
+  version: 1.0.0
+extends: openapi/tristero-feather-api-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist:
+      provider: tristero
+      harvested: '2026-07-21'
+      source: https://raw.githubusercontent.com/tristeroresearch/tristero-docs/main/openapi.json
+      notes: >-
+        Spec published in the tristeroresearch/tristero-docs repo and rendered
+        at https://docs.tristero.com/docs/feather/api/getAssets. Live
+        production surface verified 2026-07-21: GET
+        https://feather-prod.tristero.com/assets returned real asset/liquidity
+        data with no authentication.
+- target: $.info
+  update:
+    x-artifacts:
+      errors: errors/tristero-problem-types.yml
+      conventions: conventions/tristero-conventions.yml
+      dataModel: data-model/tristero-data-model.yml

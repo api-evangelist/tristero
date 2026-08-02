@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tristero-api-openapi.json
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  description: API key for authentication (if required by deployment)
+  sources:
+  - openapi/tristero-api-openapi.json

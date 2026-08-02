@@ -1,0 +1,21 @@
+{
+  "repo": "tristero",
+  "feeds": [
+    {
+      "source": "https://tristero.substack.com/feed",
+      "feed_url": "https://tristero.substack.com/feed",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://tristero.substack.com/",
+      "feed_url": "https://tristero.substack.com/feed",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 20,
+  "fetched": "2026-08-01T15:49:00Z"
+}

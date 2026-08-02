@@ -1,0 +1,979 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tristero API",
+    "description": "Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.",
+    "version": "2.0.0",
+    "contact": {
+      "name": "Tristero Support",
+      "url": "https://tristero.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.tristero.com/v2",
+      "description": "Production"
+    },
+    {
+      "url": "https://staging-api.tristero.com/v2",
+      "description": "Staging"
+    },
+    {
+      "url": "http://localhost:8060",
+      "description": "Local (Quoter)"
+    },
+    {
+      "url": "http://localhost:8070",
+      "description": "Local (Filler)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Quotes",
+      "description": "Request quotes for swaps and margin positions"
+    },
+    {
+      "name": "Orders",
+      "description": "Submit and manage orders"
+    },
+    {
+      "name": "Margin",
+      "description": "Margin position management"
+    },
+    {
+      "name": "Wallets",
+      "description": "Wallet and position queries"
+    },
+    {
+      "name": "WebSocket",
+      "description": "Real-time order updates and quote streaming"
+    }
+  ],
+  "paths": {
+    "/quotes": {
+      "post": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Get a spot swap quote",
+        "description": "Request a quote for a cross-chain spot swap. Returns order parameters that can be signed and submitted.",
+        "operationId": "getQuote",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteRequest"
+              },
+              "examples": {
+                "arbitrum-usdc-to-base-usdt": {
+                  "summary": "Arbitrum USDC to Base USDT",
+                  "value": {
+                    "src_chain_id": "42161",
+                    "src_token_address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+                    "src_token_quantity": "1000000",
+                    "src_wallet_address": "0x...",
+                    "dst_chain_id": "8453",
+                    "dst_token_address": "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2",
+                    "dst_wallet_address": "0x..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote response with order data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable - route not available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Submit an order",
+        "description": "Submit a signed order for execution. Supports spot swaps, margin positions, and feather swaps.",
+        "operationId": "fillOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Permit2OrderSubmission"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FeatherOrderSubmission"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MarginOrderSubmission"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "order_type",
+                  "mapping": {
+                    "PERMIT2": "#/components/schemas/Permit2OrderSubmission",
+                    "FEATHER": "#/components/schemas/FeatherOrderSubmission",
+                    "MARGIN": "#/components/schemas/MarginOrderSubmission"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderSubmissionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid order data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quotes/margin": {
+      "post": {
+        "tags": [
+          "Quotes",
+          "Margin"
+        ],
+        "summary": "Get a margin quote",
+        "description": "Request a quote for opening a leveraged margin position. Any token can be used as collateral.",
+        "operationId": "getMarginQuote",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarginQuoteRequest"
+              },
+              "examples": {
+                "2x-long-weth": {
+                  "summary": "2x Long WETH with USDC collateral",
+                  "value": {
+                    "chain_id": "42161",
+                    "wallet_address": "0x...",
+                    "collateral_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+                    "base_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+                    "leverage_ratio": 2,
+                    "collateral_amount": "1000000"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Margin quote response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarginQuoteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/margin-positions/{position_id}": {
+      "get": {
+        "tags": [
+          "Wallets",
+          "Margin"
+        ],
+        "summary": "Get margin position",
+        "description": "Get details of a specific margin position by ID.",
+        "operationId": "getMarginPosition",
+        "parameters": [
+          {
+            "name": "position_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Position ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Margin position details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarginPosition"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{wallet}/margin-positions": {
+      "get": {
+        "tags": [
+          "Wallets",
+          "Margin"
+        ],
+        "summary": "List margin positions",
+        "description": "Get all margin positions for a wallet address.",
+        "operationId": "getMarginPositions",
+        "parameters": [
+          {
+            "name": "wallet",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$"
+            },
+            "description": "Wallet address (checksum)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of margin positions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarginPosition"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/close-margin-position": {
+      "post": {
+        "tags": [
+          "Orders",
+          "Margin"
+        ],
+        "summary": "Close a margin position",
+        "description": "Submit a signed request to close a margin position. Can close partially or fully, with cash settlement or swap settlement.",
+        "operationId": "closeMarginPosition",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosePositionSubmission"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Close position order submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClosePositionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "QuoteRequest": {
+        "type": "object",
+        "required": [
+          "src_chain_id",
+          "src_token_address",
+          "src_token_quantity",
+          "src_wallet_address",
+          "dst_chain_id",
+          "dst_token_address",
+          "dst_wallet_address"
+        ],
+        "properties": {
+          "src_chain_id": {
+            "type": "string",
+            "description": "Source chain ID (e.g., '1' for Ethereum, '42161' for Arbitrum)",
+            "example": "42161"
+          },
+          "src_token_address": {
+            "type": "string",
+            "description": "Source token address or 'native' for gas token",
+            "example": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+          },
+          "src_token_quantity": {
+            "type": "string",
+            "description": "Amount to swap in raw units (wei/token decimals)",
+            "example": "1000000"
+          },
+          "src_wallet_address": {
+            "type": "string",
+            "description": "Source wallet address",
+            "example": "0x..."
+          },
+          "dst_chain_id": {
+            "type": "string",
+            "description": "Destination chain ID",
+            "example": "8453"
+          },
+          "dst_token_address": {
+            "type": "string",
+            "description": "Destination token address or 'native'",
+            "example": "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2"
+          },
+          "dst_wallet_address": {
+            "type": "string",
+            "description": "Destination wallet address",
+            "example": "0x..."
+          }
+        }
+      },
+      "QuoteResponse": {
+        "type": "object",
+        "properties": {
+          "src_token": {
+            "$ref": "#/components/schemas/TokenInfo"
+          },
+          "dst_token": {
+            "$ref": "#/components/schemas/TokenInfo"
+          },
+          "order_data": {
+            "$ref": "#/components/schemas/OrderData"
+          },
+          "order_type": {
+            "type": "string",
+            "enum": [
+              "FEATHER",
+              "PERMIT2"
+            ],
+            "description": "Type of swap mechanism"
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Unique order identifier"
+          },
+          "router_address": {
+            "type": "string",
+            "description": "Router contract address for Permit2 approvals"
+          }
+        }
+      },
+      "MarginQuoteRequest": {
+        "type": "object",
+        "required": [
+          "chain_id",
+          "wallet_address",
+          "collateral_token",
+          "base_token",
+          "leverage_ratio",
+          "collateral_amount"
+        ],
+        "properties": {
+          "chain_id": {
+            "type": "string",
+            "description": "Chain ID where position will be opened",
+            "example": "42161"
+          },
+          "wallet_address": {
+            "type": "string",
+            "description": "User's wallet address",
+            "example": "0x..."
+          },
+          "collateral_token": {
+            "type": "string",
+            "description": "Collateral token address (any ERC20, e.g., USDC, USDT0, WETH)",
+            "example": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+          },
+          "base_token": {
+            "type": "string",
+            "description": "Base token address for the position (e.g., WETH for long ETH)",
+            "example": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+          },
+          "leverage_ratio": {
+            "type": "integer",
+            "description": "Leverage multiplier (e.g., 2 for 2x)",
+            "minimum": 1,
+            "example": 2
+          },
+          "collateral_amount": {
+            "type": "string",
+            "description": "Collateral amount in raw units",
+            "example": "1000000"
+          }
+        }
+      },
+      "MarginQuoteResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "chain_id": {
+            "type": "string",
+            "description": "Chain ID"
+          },
+          "collateral_token": {
+            "$ref": "#/components/schemas/TokenMetadata"
+          },
+          "base_token": {
+            "$ref": "#/components/schemas/TokenMetadata"
+          },
+          "loan_token": {
+            "$ref": "#/components/schemas/TokenMetadata"
+          },
+          "interest_rate_bps": {
+            "type": "integer",
+            "description": "Annual interest rate in basis points"
+          },
+          "order_data": {
+            "$ref": "#/components/schemas/OrderData"
+          },
+          "position_size": {
+            "type": "string",
+            "description": "Total position size in base token units"
+          },
+          "loan_amount": {
+            "type": "string",
+            "description": "Amount being borrowed"
+          }
+        }
+      },
+      "Permit2OrderSubmission": {
+        "type": "object",
+        "required": [
+          "signature",
+          "domain",
+          "message"
+        ],
+        "properties": {
+          "signature": {
+            "type": "string",
+            "description": "EIP-712 signature (0x-prefixed hex)",
+            "example": "0x..."
+          },
+          "domain": {
+            "$ref": "#/components/schemas/EIP712Domain"
+          },
+          "message": {
+            "$ref": "#/components/schemas/PermitWitnessTransferFrom"
+          }
+        }
+      },
+      "FeatherOrderSubmission": {
+        "type": "object",
+        "required": [
+          "client_id",
+          "src_chain",
+          "dst_chain",
+          "dst_address",
+          "amount"
+        ],
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "description": "Client identifier"
+          },
+          "src_chain": {
+            "type": "string",
+            "description": "Source chain ID"
+          },
+          "dst_chain": {
+            "type": "string",
+            "description": "Destination chain ID"
+          },
+          "dst_address": {
+            "type": "string",
+            "description": "Destination address for funds"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Amount to swap"
+          }
+        }
+      },
+      "MarginOrderSubmission": {
+        "type": "object",
+        "required": [
+          "signature",
+          "domain",
+          "message",
+          "typed_data"
+        ],
+        "properties": {
+          "signature": {
+            "type": "string",
+            "description": "EIP-712 signature"
+          },
+          "domain": {
+            "$ref": "#/components/schemas/EIP712Domain"
+          },
+          "message": {
+            "$ref": "#/components/schemas/PermitWitnessTransferFrom"
+          },
+          "typed_data": {
+            "type": "object",
+            "description": "Full typed data structure used for signing"
+          }
+        }
+      },
+      "ClosePositionSubmission": {
+        "type": "object",
+        "required": [
+          "signature",
+          "domain",
+          "message",
+          "chainId",
+          "typed_data"
+        ],
+        "properties": {
+          "signature": {
+            "type": "string",
+            "description": "EIP-712 signature for CloseWithSwap"
+          },
+          "domain": {
+            "$ref": "#/components/schemas/EIP712Domain"
+          },
+          "message": {
+            "type": "object",
+            "description": "CloseWithSwap message data",
+            "properties": {
+              "positionId": {
+                "type": "integer",
+                "description": "Position NFT token ID"
+              },
+              "cashSettle": {
+                "type": "boolean",
+                "description": "True for cash settlement, false for swap settlement"
+              },
+              "fractionBps": {
+                "type": "integer",
+                "description": "Fraction to close in basis points (10000 = 100%)"
+              },
+              "authorized": {
+                "type": "string",
+                "description": "Authorized filler address"
+              },
+              "nonce": {
+                "type": "integer",
+                "description": "Unique nonce for the signature"
+              },
+              "deadline": {
+                "type": "integer",
+                "description": "Unix timestamp deadline"
+              }
+            }
+          },
+          "chainId": {
+            "type": "string",
+            "description": "Chain ID"
+          },
+          "typed_data": {
+            "type": "object",
+            "description": "Complete typed data for verification"
+          }
+        }
+      },
+      "OrderSubmissionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Order ID for tracking"
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Order ID (alternative field)"
+          },
+          "status": {
+            "type": "string",
+            "description": "Initial order status"
+          },
+          "deposit_address": {
+            "type": "string",
+            "description": "For Feather swaps: address to send funds to"
+          },
+          "detail": {
+            "type": "object",
+            "description": "Error details if submission failed"
+          }
+        }
+      },
+      "ClosePositionResponse": {
+        "type": "object",
+        "properties": {
+          "close_order": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Close order ID"
+              }
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "string"
+          }
+        }
+      },
+      "MarginPosition": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Position ID"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "closing",
+              "closed"
+            ],
+            "description": "Position status"
+          },
+          "escrow_address": {
+            "type": "string",
+            "description": "Escrow contract address holding the position"
+          },
+          "filler_address": {
+            "type": "string",
+            "description": "Authorized filler address"
+          },
+          "taker_token_id": {
+            "type": "integer",
+            "description": "NFT token ID representing the position"
+          },
+          "wallet_address": {
+            "type": "string",
+            "description": "Owner wallet address"
+          },
+          "collateral_token": {
+            "type": "string",
+            "description": "Collateral token address"
+          },
+          "base_token": {
+            "type": "string",
+            "description": "Base token address"
+          },
+          "loan_token": {
+            "type": "string",
+            "description": "Loan token address"
+          },
+          "collateral_amount": {
+            "type": "string",
+            "description": "Collateral amount in raw units"
+          },
+          "loan_amount": {
+            "type": "string",
+            "description": "Outstanding loan amount"
+          },
+          "leverage_ratio": {
+            "type": "integer",
+            "description": "Position leverage"
+          },
+          "interest_rate_bps": {
+            "type": "integer",
+            "description": "Annual interest rate in basis points"
+          },
+          "opened_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Position open timestamp"
+          }
+        }
+      },
+      "TokenInfo": {
+        "type": "object",
+        "properties": {
+          "chain_id": {
+            "type": "integer"
+          },
+          "address": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "decimals": {
+            "type": "integer"
+          }
+        }
+      },
+      "TokenMetadata": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "decimals": {
+            "type": "integer"
+          }
+        }
+      },
+      "OrderData": {
+        "type": "object",
+        "properties": {
+          "parameters": {
+            "$ref": "#/components/schemas/OrderParameters"
+          },
+          "deadline": {
+            "type": "integer",
+            "description": "Unix timestamp deadline"
+          },
+          "router_address": {
+            "type": "string",
+            "description": "Router contract address"
+          },
+          "filler_wallet_address": {
+            "type": "string",
+            "description": "Filler wallet address"
+          },
+          "order_type": {
+            "type": "string",
+            "enum": [
+              "FEATHER",
+              "PERMIT2",
+              "MARGIN"
+            ]
+          },
+          "custom_data": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        }
+      },
+      "OrderParameters": {
+        "type": "object",
+        "properties": {
+          "src_asset": {
+            "type": "string",
+            "description": "Source token address"
+          },
+          "dst_asset": {
+            "type": "string",
+            "description": "Destination token address"
+          },
+          "src_quantity": {
+            "type": "string",
+            "description": "Source amount"
+          },
+          "dst_quantity": {
+            "type": "string",
+            "description": "Expected destination amount"
+          },
+          "min_quantity": {
+            "type": "string",
+            "description": "Minimum acceptable output (slippage protection)"
+          },
+          "dark_salt": {
+            "type": "string",
+            "description": "Random salt for order uniqueness"
+          }
+        }
+      },
+      "EIP712Domain": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Permit2"
+          },
+          "version": {
+            "type": "string",
+            "example": "1"
+          },
+          "chainId": {
+            "type": "integer",
+            "description": "Chain ID where the contract is deployed"
+          },
+          "verifyingContract": {
+            "type": "string",
+            "description": "Contract address that verifies the signature",
+            "example": "0x000000000022D473030F116dDEE9F6B43aC78BA3"
+          }
+        }
+      },
+      "PermitWitnessTransferFrom": {
+        "type": "object",
+        "description": "EIP-712 PermitWitnessTransferFrom message structure",
+        "properties": {
+          "permitted": {
+            "$ref": "#/components/schemas/TokenPermissions"
+          },
+          "spender": {
+            "type": "string",
+            "description": "Address authorized to spend tokens"
+          },
+          "nonce": {
+            "type": "string",
+            "description": "Unique nonce to prevent replay"
+          },
+          "deadline": {
+            "type": "string",
+            "description": "Signature expiration timestamp"
+          },
+          "witness": {
+            "$ref": "#/components/schemas/SignedOrder"
+          }
+        }
+      },
+      "TokenPermissions": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Token contract address"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Permitted amount"
+          }
+        }
+      },
+      "SignedOrder": {
+        "type": "object",
+        "properties": {
+          "sender": {
+            "type": "string",
+            "description": "Order sender address"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/OrderParameters"
+          },
+          "deadline": {
+            "type": "string",
+            "description": "Order deadline"
+          },
+          "target": {
+            "type": "string",
+            "description": "Target/recipient address"
+          },
+          "filler": {
+            "type": "string",
+            "description": "Authorized filler address"
+          },
+          "orderType": {
+            "type": "string",
+            "enum": [
+              "FEATHER",
+              "PERMIT2",
+              "MARGIN"
+            ]
+          },
+          "customData": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "detail": {
+            "type": "object",
+            "description": "Additional error details"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "API key for authentication (if required by deployment)"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "externalDocs": {
+    "description": "Tristero Python SDK Documentation",
+    "url": "https://pypi.org/project/tristero/"
+  }
+}

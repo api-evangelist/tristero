@@ -1,0 +1,69 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://docs.tristero.com (Introduction, Python SDK, WebSocket Streaming,
+  Configuration, Feather Quickstart) plus the two published OpenAPI specs in
+  openapi/.
+description: >-
+  Cross-cutting request/response semantics of Tristero's trading APIs. The
+  platform is wallet-centric rather than account-centric: spot and margin
+  orders are authorized by EIP-712 / Permit2 signatures rather than bearer
+  credentials, the optional X-API-Key header applies only where a deployment
+  requires it, and Feather requires no authentication at all. Real-time
+  semantics run over WebSocket rather than webhooks.
+
+api_style: REST over HTTPS, JSON requests and responses
+base_urls:
+  tristero: https://api.tristero.com/v2
+  feather: https://feather-prod.tristero.com
+
+authentication:
+  scheme: >-
+    apiKey (X-API-Key header) "if required by deployment" on the Tristero
+    API; none on Feather. Order authorization is cryptographic - EIP-712
+    typed-data signatures over Permit2 permits - so no token approval
+    transactions are needed.
+  detail: authentication/tristero-authentication.yml
+
+signing:
+  model: Permit2 + EIP-712
+  flow: quote -> approve via Permit2 (gasless) -> sign EIP-712 order -> submit -> monitor via WebSocket
+  schemas: [EIP712Domain, PermitWitnessTransferFrom, TokenPermissions, SignedOrder]
+
+idempotency:
+  supported: false
+  notes: No idempotency-key header or replay contract is documented in the specs or docs.
+
+pagination:
+  supported: false
+  notes: List endpoints (e.g. getMarginPositions) return full result sets; no cursor or page parameters.
+
+realtime:
+  transport: WebSocket
+  quote_streaming: >-
+    subscribe_quotes (Python SDK) opens a persistent WebSocket and delivers
+    live quotes ~every 500ms with a latest-only delivery pattern -
+    intermediate updates are dropped while a callback runs, so slow work
+    (sign + submit) inside the callback cannot double-execute.
+  order_updates: wait_for_completion(order_id, order_type) iterates order update events for spot, margin, and Feather orders.
+  docs: https://docs.tristero.com/docs/tristero/python-sdk/websocket-streaming
+
+feather_flow:
+  style: deposit-address polling
+  flow: GET /assets -> GET /price -> POST /trade (returns deposit address + trade id) -> poll GET /status
+  notes: No smart contracts, wallet connections, or LPs; send funds to the returned deposit address and Feather pays out from reserves.
+
+versioning:
+  scheme: uri-path (v2)
+  detail: lifecycle/tristero-lifecycle.yml
+
+error_envelope:
+  tristero: '{error: string, detail: object} (ErrorResponse)'
+  feather: '{result: "error", error: string} (Error)'
+  detail: errors/tristero-problem-types.yml
+
+rate_limits:
+  documented: false
+
+environments:
+  detail: sandbox/tristero-sandbox.yml

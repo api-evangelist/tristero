@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.tristero.com/docs/tristero/python-sdk/configuration
+description: >-
+  Tristero publishes a staging environment and first-class environment
+  switching in its SDKs. The Python SDK supports three environments -
+  PRODUCTION (default), STAGING, and LOCAL - set globally with
+  set_config("STAGING") or per call with the env keyword argument that every
+  user-facing SDK function accepts. No magic test values, test wallets, or
+  faucets are published; testing against staging uses your own keys and
+  assets.
+environments:
+- name: PRODUCTION
+  api: https://api.tristero.com/v2
+  default: true
+- name: STAGING
+  api: https://staging-api.tristero.com/v2
+  how: set_config("STAGING") globally, or env="STAGING" per call
+- name: LOCAL
+  api: http://localhost:8060 (Quoter) / http://localhost:8070 (Filler)
+  how: env="LOCAL" per call
+test_values: none published
+notes:
+- The Feather API (https://feather-prod.tristero.com) publishes no staging host; GET /assets and GET /price are unauthenticated and free to call for integration testing without moving funds.
+- SDK examples read TEST_ACCOUNT_PRIVKEY and ARB_RPC_URL from the environment; Tristero does not distribute test keys.

@@ -1,0 +1,26 @@
+{
+  "provider": "tristero",
+  "sources": [
+    "tristero-assets-api-openapi.yml",
+    "tristero-margin-api-openapi.yml",
+    "tristero-orders-api-openapi.yml",
+    "tristero-pricing-api-openapi.yml",
+    "tristero-quotes-api-openapi.yml",
+    "tristero-trading-api-openapi.yml",
+    "tristero-wallets-api-openapi.yml"
+  ],
+  "outputs": [
+    "tristero-assets-api-openapi.yml",
+    "tristero-margin-api-openapi.yml",
+    "tristero-orders-api-openapi.yml",
+    "tristero-pricing-api-openapi.yml",
+    "tristero-quotes-api-openapi.yml",
+    "tristero-trading-api-openapi.yml",
+    "tristero-wallets-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

@@ -1,0 +1,37 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/tristero-api-openapi.json + openapi/tristero-feather-api-openapi.json
+format: custom-json
+description: >-
+  Error catalog derived from the 4xx responses declared in Tristero's two
+  published OpenAPI specs. Neither API uses RFC 9457 problem+json - the
+  Tristero API returns an ErrorResponse envelope {error: string, detail:
+  object}; the Feather API returns {result: "error", error: string}.
+envelopes:
+- api: Tristero API
+  schema: ErrorResponse
+  shape: '{error: string, detail: object}'
+- api: Feather API
+  schema: Error
+  shape: '{result: "error", error: string}'
+problems:
+- status: 400
+  title: Invalid request parameters
+  source_operation: openapi/tristero-api-openapi.json#getQuote
+- status: 422
+  title: Unprocessable - route not available
+  detail: The requested swap route is not available.
+  source_operation: openapi/tristero-api-openapi.json#getQuote
+- status: 400
+  title: Invalid order data
+  source_operation: openapi/tristero-api-openapi.json#fillOrder
+- status: 400
+  title: Invalid request
+  source_operation: openapi/tristero-api-openapi.json#getMarginQuote
+- status: 400
+  title: Bad request - invalid parameters
+  example: 'Invalid output address format for ETH'
+  source_operation: openapi/tristero-feather-api-openapi.json#createTrade
+- status: 404
+  title: Trade not found
+  source_operation: openapi/tristero-feather-api-openapi.json#getStatus
