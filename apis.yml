@@ -182,6 +182,8 @@ apis:
   - type: GettingStarted
     url: https://docs.tristero.com/docs/feather/quickstart
 common:
+- type: Overlay
+  url: overlays/tristero-api-overlay.yaml
 - type: DomainSecurity
   url: security/tristero-domain-security.yml
 - type: Authentication
