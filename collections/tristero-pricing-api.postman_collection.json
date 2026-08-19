@@ -1,0 +1,169 @@
+{
+  "item": [
+    {
+      "id": "b30530f7-2961-448d-987a-739d2008f9bb",
+      "name": "Pricing",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "39a06042-113d-4e70-a395-2051becf5a52",
+          "name": "Get price quote",
+          "request": {
+            "name": "Get price quote",
+            "description": {
+              "content": "Returns a live price quote for a swap between two assets. Optionally computes a worked example for a specific input or output amount.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "price"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "input_asset",
+                  "value": "<string>",
+                  "description": "(Required) Asset you are sending (e.g. BTC)"
+                },
+                {
+                  "disabled": false,
+                  "key": "output_asset",
+                  "value": "<string>",
+                  "description": "(Required) Asset you want to receive (e.g. ETH)"
+                },
+                {
+                  "disabled": false,
+                  "key": "input_amount",
+                  "value": "<float>",
+                  "description": "If provided, compute the expected output for this input amount"
+                },
+                {
+                  "disabled": false,
+                  "key": "output_amount",
+                  "value": "<float>",
+                  "description": "If provided, estimate the required input to receive this output amount"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "db3d7d07-8ffe-4331-aada-d90555d23636",
+              "name": "Price information for the requested swap",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "price"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "input_asset",
+                      "value": "BTC"
+                    },
+                    {
+                      "key": "output_asset",
+                      "value": "ETH"
+                    },
+                    {
+                      "key": "input_amount",
+                      "value": "0.5"
+                    },
+                    {
+                      "key": "output_amount",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"InputAsset\": {\n    \"AssetName\": \"BTC\",\n    \"UsdMarketMid\": 65432.18,\n    \"HalfSpread\": 0.0012,\n    \"MarketHalfSpread\": 0.0008,\n    \"HalfFee\": 0.00015,\n    \"MinAmount\": 0.001,\n    \"MaxOutput\": 10.5,\n    \"MaxInput\": 15,\n    \"PriceImpactRate\": 0.00005,\n    \"CapacityFraction\": 0.73,\n    \"TargetBalance\": 20,\n    \"CurrentBalance\": 14.6,\n    \"FundingAddress\": \"bc1qfeatherfundingaddress1234567890abcdef\"\n  },\n  \"OutputAsset\": {\n    \"AssetName\": \"ETH\",\n    \"UsdMarketMid\": 3456.78,\n    \"HalfSpread\": 0.0008,\n    \"MarketHalfSpread\": 0.0005,\n    \"HalfFee\": 0.0025,\n    \"MinAmount\": 0.01,\n    \"MaxOutput\": 150,\n    \"MaxInput\": 200,\n    \"PriceImpactRate\": 0.00002,\n    \"CapacityFraction\": 0.85,\n    \"TargetBalance\": 200,\n    \"CurrentBalance\": 170,\n    \"FundingAddress\": \"0xFeatherFundingAddress1234567890abcdef1234\"\n  },\n  \"ExchangeRate\": 18.92,\n  \"InputFee\": 0.0003,\n  \"MaxInput\": 10.5,\n  \"MinInput\": 0.001,\n  \"MaxOutput\": 150\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tristero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9a92009c-3f9a-4c40-81b4-ac2610ccfd2c",
+    "name": "Tristero Assets Pricing API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.\n\nContact Support:\n Name: Tristero Support",
+      "type": "text/plain"
+    }
+  }
+}

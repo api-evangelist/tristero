@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tristero Assets Margin API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{X-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Margin",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a margin quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tristero.com/v2/quotes/margin",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a quote for opening a leveraged margin position. Any token can be used as collateral."
+        },
+        {
+          "info": {
+            "name": "Get margin position",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tristero.com/v2/wallets/margin-positions/:position_id",
+            "params": [
+              {
+                "name": "position_id",
+                "value": "",
+                "type": "path",
+                "description": "Position ID"
+              }
+            ]
+          },
+          "docs": "Get details of a specific margin position by ID."
+        },
+        {
+          "info": {
+            "name": "List margin positions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tristero.com/v2/wallets/:wallet/margin-positions",
+            "params": [
+              {
+                "name": "wallet",
+                "value": "",
+                "type": "path",
+                "description": "Wallet address (checksum)"
+              }
+            ]
+          },
+          "docs": "Get all margin positions for a wallet address."
+        },
+        {
+          "info": {
+            "name": "Close a margin position",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tristero.com/v2/orders/close-margin-position",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a signed request to close a margin position. Can close partially or fully, with cash settlement or swap settlement."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

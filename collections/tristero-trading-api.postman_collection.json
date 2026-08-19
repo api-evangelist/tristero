@@ -1,0 +1,337 @@
+{
+  "item": [
+    {
+      "id": "148eaf82-1bfe-4ad4-99ca-1ad8ddeef3cd",
+      "name": "Trading",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "38a6d0f5-757a-4b16-8ca7-8c6fc105dcb0",
+          "name": "Create a trade",
+          "request": {
+            "name": "Create a trade",
+            "description": {
+              "content": "Creates a new trade. Allocates and returns a deposit address you should send funds to.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "trade"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"InputAsset\": \"<string>\",\n  \"OutputAsset\": \"<string>\",\n  \"OutputAddress\": \"<string>\",\n  \"ReturnAddress\": \"<string>\",\n  \"MaxSlippage\": \"<float>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d188a9a6-7698-4a97-878c-42095d44fdd4",
+              "name": "Trade created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "trade"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"InputAsset\": \"BTC\",\n  \"OutputAsset\": \"ETH\",\n  \"OutputAddress\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"ReturnAddress\": \"bc1qreturnaddress1234567890abcdef\",\n  \"MaxSlippage\": 0.01\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"TradeID\": \"trade_abc123def456\",\n  \"Created\": \"2026-04-01T14:30:00Z\",\n  \"Expires\": \"2026-04-01T16:30:00Z\",\n  \"InputAsset\": \"BTC\",\n  \"OutputAsset\": \"ETH\",\n  \"OutputAddress\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"ReturnAddress\": \"bc1qreturnaddress1234567890abcdef\",\n  \"MaxSlippage\": 0.01,\n  \"InputAddress\": \"bc1qdepositunique7890123456xyzabc\",\n  \"MaxInput\": 10.5,\n  \"QuotedPrice\": 18.92,\n  \"ExecutionState\": \"Awaiting Deposit\",\n  \"FailedAndReturned\": false,\n  \"PriceInfo\": {\n    \"InputAsset\": {\n      \"AssetName\": \"BTC\",\n      \"UsdMarketMid\": 65432.18,\n      \"HalfSpread\": 0.0012,\n      \"MarketHalfSpread\": 0.0008,\n      \"HalfFee\": 0.00015,\n      \"MinAmount\": 0.001,\n      \"MaxOutput\": 10.5,\n      \"MaxInput\": 15,\n      \"PriceImpactRate\": 0.00005,\n      \"CapacityFraction\": 0.73,\n      \"TargetBalance\": 20,\n      \"CurrentBalance\": 14.6,\n      \"FundingAddress\": \"bc1qfeatherfundingaddress1234567890abcdef\"\n    },\n    \"OutputAsset\": {\n      \"AssetName\": \"ETH\",\n      \"UsdMarketMid\": 3456.78,\n      \"HalfSpread\": 0.0008,\n      \"MarketHalfSpread\": 0.0005,\n      \"HalfFee\": 0.0025,\n      \"MinAmount\": 0.01,\n      \"MaxOutput\": 150,\n      \"MaxInput\": 200,\n      \"PriceImpactRate\": 0.00002,\n      \"CapacityFraction\": 0.85,\n      \"TargetBalance\": 200,\n      \"CurrentBalance\": 170,\n      \"FundingAddress\": \"0xFeatherFundingAddress1234567890abcdef1234\"\n    },\n    \"ExchangeRate\": 18.92,\n    \"InputFee\": 0.0003,\n    \"MaxInput\": 10.5,\n    \"MinInput\": 0.001,\n    \"MaxOutput\": 150\n  },\n  \"EventLog\": [\n    \"2026-04-01T14:30:00Z - Trade created\",\n    \"2026-04-01T14:30:00Z - Awaiting deposit to bc1qdepositunique7890123456xyzabc\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb706c1e-c6ec-480c-88f6-ef3b8cf3e508",
+              "name": "Bad request - invalid parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "trade"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"InputAsset\": \"BTC\",\n  \"OutputAsset\": \"ETH\",\n  \"OutputAddress\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"ReturnAddress\": \"bc1qreturnaddress1234567890abcdef\",\n  \"MaxSlippage\": 0.01\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": \"error\",\n  \"error\": \"Invalid output address format for ETH\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2708582f-fd65-4468-90ae-0c8c3d856d6d",
+          "name": "Get trade status",
+          "request": {
+            "name": "Get trade status",
+            "description": {
+              "content": "Returns the current state of a trade.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>",
+                  "description": "(Required) Trade ID returned by POST /trade"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "335d66fa-5d56-42ca-879e-6c8c9e0e1ca5",
+              "name": "Current trade status",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "trade_abc123def456"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"TradeID\": \"trade_abc123def456\",\n  \"Created\": \"2026-04-01T14:30:00Z\",\n  \"Expires\": \"2026-04-01T16:30:00Z\",\n  \"InputAsset\": \"BTC\",\n  \"OutputAsset\": \"ETH\",\n  \"OutputAddress\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"ReturnAddress\": \"bc1qreturnaddress1234567890abcdef\",\n  \"MaxSlippage\": 0.01,\n  \"InputAddress\": \"bc1qdepositunique7890123456xyzabc\",\n  \"MaxInput\": 10.5,\n  \"QuotedPrice\": 18.92,\n  \"ExecutionState\": \"Awaiting Deposit\",\n  \"FailedAndReturned\": false,\n  \"PriceInfo\": {\n    \"InputAsset\": {\n      \"AssetName\": \"BTC\",\n      \"UsdMarketMid\": 65432.18,\n      \"HalfSpread\": 0.0012,\n      \"MarketHalfSpread\": 0.0008,\n      \"HalfFee\": 0.00015,\n      \"MinAmount\": 0.001,\n      \"MaxOutput\": 10.5,\n      \"MaxInput\": 15,\n      \"PriceImpactRate\": 0.00005,\n      \"CapacityFraction\": 0.73,\n      \"TargetBalance\": 20,\n      \"CurrentBalance\": 14.6,\n      \"FundingAddress\": \"bc1qfeatherfundingaddress1234567890abcdef\"\n    },\n    \"OutputAsset\": {\n      \"AssetName\": \"ETH\",\n      \"UsdMarketMid\": 3456.78,\n      \"HalfSpread\": 0.0008,\n      \"MarketHalfSpread\": 0.0005,\n      \"HalfFee\": 0.0025,\n      \"MinAmount\": 0.01,\n      \"MaxOutput\": 150,\n      \"MaxInput\": 200,\n      \"PriceImpactRate\": 0.00002,\n      \"CapacityFraction\": 0.85,\n      \"TargetBalance\": 200,\n      \"CurrentBalance\": 170,\n      \"FundingAddress\": \"0xFeatherFundingAddress1234567890abcdef1234\"\n    },\n    \"ExchangeRate\": 18.92,\n    \"InputFee\": 0.0003,\n    \"MaxInput\": 10.5,\n    \"MinInput\": 0.001,\n    \"MaxOutput\": 150\n  },\n  \"EventLog\": [\n    \"2026-04-01T14:30:00Z - Trade created\",\n    \"2026-04-01T14:30:00Z - Awaiting deposit to bc1qdepositunique7890123456xyzabc\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e52d70e4-91e9-4fd7-aaa8-e0ec23839553",
+              "name": "Trade not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "trade_abc123def456"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": \"error\",\n  \"error\": \"Trade not found: trade_xyz789invalid\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tristero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4a0c3e5c-456a-4049-a7e5-1c7027fbc002",
+    "name": "Tristero Assets Trading API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.\n\nContact Support:\n Name: Tristero Support",
+      "type": "text/plain"
+    }
+  }
+}

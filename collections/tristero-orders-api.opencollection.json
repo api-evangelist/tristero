@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tristero Assets Orders API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{X-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Submit an order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tristero.com/v2/orders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a signed order for execution. Supports spot swaps, margin positions, and feather swaps."
+        },
+        {
+          "info": {
+            "name": "Close a margin position",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tristero.com/v2/orders/close-margin-position",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a signed request to close a margin position. Can close partially or fully, with cash settlement or swap settlement."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

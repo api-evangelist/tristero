@@ -1,0 +1,245 @@
+{
+  "item": [
+    {
+      "id": "33d0faaf-e3df-4ffb-9180-6513313e0676",
+      "name": "Wallets",
+      "description": {
+        "content": "Wallet and position queries",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3c229e52-5416-4b1a-9d7c-77a946620159",
+          "name": "Get margin position",
+          "request": {
+            "name": "Get margin position",
+            "description": {
+              "content": "Get details of a specific margin position by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "wallets",
+                "margin-positions",
+                ":position_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "position_id",
+                  "description": "(Required) Position ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1be08262-0644-4656-aa50-ae85d1b4a4da",
+              "name": "Margin position details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallets",
+                    "margin-positions",
+                    ":position_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "position_id",
+                      "description": "(Required) Position ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"status\": \"closing\",\n  \"escrow_address\": \"string\",\n  \"filler_address\": \"string\",\n  \"taker_token_id\": 1306,\n  \"wallet_address\": \"string\",\n  \"collateral_token\": \"string\",\n  \"base_token\": \"string\",\n  \"loan_token\": \"string\",\n  \"collateral_amount\": \"string\",\n  \"loan_amount\": \"string\",\n  \"leverage_ratio\": 6715,\n  \"interest_rate_bps\": 6361,\n  \"opened_at\": \"1978-11-25T01:15:08.023Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5ee32e41-a5ae-419a-94d0-0aee25334116",
+          "name": "List margin positions",
+          "request": {
+            "name": "List margin positions",
+            "description": {
+              "content": "Get all margin positions for a wallet address.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "wallets",
+                ":wallet",
+                "margin-positions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "wallet",
+                  "description": "(Required) Wallet address (checksum)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "77661aec-67e5-423e-9c88-f24b0ceb4806",
+              "name": "List of margin positions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wallets",
+                    ":wallet",
+                    "margin-positions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "wallet",
+                      "description": "(Required) Wallet address (checksum)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"status\": \"open\",\n    \"escrow_address\": \"string\",\n    \"filler_address\": \"string\",\n    \"taker_token_id\": 2624,\n    \"wallet_address\": \"string\",\n    \"collateral_token\": \"string\",\n    \"base_token\": \"string\",\n    \"loan_token\": \"string\",\n    \"collateral_amount\": \"string\",\n    \"loan_amount\": \"string\",\n    \"leverage_ratio\": 4376,\n    \"interest_rate_bps\": 8831,\n    \"opened_at\": \"1965-05-10T08:27:51.065Z\"\n  },\n  {\n    \"id\": \"string\",\n    \"status\": \"open\",\n    \"escrow_address\": \"string\",\n    \"filler_address\": \"string\",\n    \"taker_token_id\": 8258,\n    \"wallet_address\": \"string\",\n    \"collateral_token\": \"string\",\n    \"base_token\": \"string\",\n    \"loan_token\": \"string\",\n    \"collateral_amount\": \"string\",\n    \"loan_amount\": \"string\",\n    \"leverage_ratio\": 8655,\n    \"interest_rate_bps\": 5046,\n    \"opened_at\": \"2010-12-21T16:23:33.449Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tristero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ea4166ae-ecc2-4e4a-82a0-9e541996ff08",
+    "name": "Tristero Assets Wallets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.\n\nContact Support:\n Name: Tristero Support",
+      "type": "text/plain"
+    }
+  }
+}

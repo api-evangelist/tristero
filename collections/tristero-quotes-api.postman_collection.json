@@ -1,0 +1,403 @@
+{
+  "item": [
+    {
+      "id": "08184c37-85f2-459d-b077-4fa022bd281d",
+      "name": "Quotes",
+      "description": {
+        "content": "Request quotes for swaps and margin positions",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "57bf1d39-799e-4c25-a8fa-30e6108f71f5",
+          "name": "Get a spot swap quote",
+          "request": {
+            "name": "Get a spot swap quote",
+            "description": {
+              "content": "Request a quote for a cross-chain spot swap. Returns order parameters that can be signed and submitted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "quotes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"src_chain_id\": \"<string>\",\n  \"src_token_address\": \"<string>\",\n  \"src_token_quantity\": \"<string>\",\n  \"src_wallet_address\": \"<string>\",\n  \"dst_chain_id\": \"<string>\",\n  \"dst_token_address\": \"<string>\",\n  \"dst_wallet_address\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9430dd68-1106-4d59-a38e-db5aace7758a",
+              "name": "Quote response with order data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"src_chain_id\": \"42161\",\n  \"src_token_address\": \"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\n  \"src_token_quantity\": \"1000000\",\n  \"src_wallet_address\": \"0x...\",\n  \"dst_chain_id\": \"8453\",\n  \"dst_token_address\": \"0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2\",\n  \"dst_wallet_address\": \"0x...\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"src_token\": {\n    \"chain_id\": 9172,\n    \"address\": \"string\",\n    \"symbol\": \"string\",\n    \"decimals\": 6594\n  },\n  \"dst_token\": {\n    \"chain_id\": 9964,\n    \"address\": \"string\",\n    \"symbol\": \"string\",\n    \"decimals\": 5190\n  },\n  \"order_data\": {\n    \"parameters\": {\n      \"src_asset\": \"string\",\n      \"dst_asset\": \"string\",\n      \"src_quantity\": \"string\",\n      \"dst_quantity\": \"string\",\n      \"min_quantity\": \"string\",\n      \"dark_salt\": \"string\"\n    },\n    \"deadline\": 7326,\n    \"router_address\": \"string\",\n    \"filler_wallet_address\": \"string\",\n    \"order_type\": \"MARGIN\",\n    \"custom_data\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"order_type\": \"FEATHER\",\n  \"order_id\": \"string\",\n  \"router_address\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2f3d77b-98ed-4386-a541-4049d6d95cf9",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"src_chain_id\": \"42161\",\n  \"src_token_address\": \"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\n  \"src_token_quantity\": \"1000000\",\n  \"src_wallet_address\": \"0x...\",\n  \"dst_chain_id\": \"8453\",\n  \"dst_token_address\": \"0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2\",\n  \"dst_wallet_address\": \"0x...\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"detail\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "07bed9f7-0664-4714-9239-f32bf494d76b",
+              "name": "Unprocessable - route not available",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"src_chain_id\": \"42161\",\n  \"src_token_address\": \"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\n  \"src_token_quantity\": \"1000000\",\n  \"src_wallet_address\": \"0x...\",\n  \"dst_chain_id\": \"8453\",\n  \"dst_token_address\": \"0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2\",\n  \"dst_wallet_address\": \"0x...\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"detail\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9e3af9b7-ed6a-4992-b22a-4e152e61ebbe",
+          "name": "Get a margin quote",
+          "request": {
+            "name": "Get a margin quote",
+            "description": {
+              "content": "Request a quote for opening a leveraged margin position. Any token can be used as collateral.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "quotes",
+                "margin"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chain_id\": \"<string>\",\n  \"wallet_address\": \"<string>\",\n  \"collateral_token\": \"<string>\",\n  \"base_token\": \"<string>\",\n  \"leverage_ratio\": \"<integer>\",\n  \"collateral_amount\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fc066a29-c1f1-45a7-a0f6-39f0d1056131",
+              "name": "Margin quote response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "quotes",
+                    "margin"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chain_id\": \"42161\",\n  \"wallet_address\": \"0x...\",\n  \"collateral_token\": \"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\n  \"base_token\": \"0x82aF49447D8a07e3bd95BD0d56f35241523fBab1\",\n  \"leverage_ratio\": 2,\n  \"collateral_amount\": \"1000000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"string\",\n  \"chain_id\": \"string\",\n  \"collateral_token\": {\n    \"address\": \"string\",\n    \"symbol\": \"string\",\n    \"name\": \"string\",\n    \"decimals\": 9148\n  },\n  \"base_token\": {\n    \"address\": \"string\",\n    \"symbol\": \"string\",\n    \"name\": \"string\",\n    \"decimals\": 1203\n  },\n  \"loan_token\": {\n    \"address\": \"string\",\n    \"symbol\": \"string\",\n    \"name\": \"string\",\n    \"decimals\": 7929\n  },\n  \"interest_rate_bps\": 7615,\n  \"order_data\": {\n    \"parameters\": {\n      \"src_asset\": \"string\",\n      \"dst_asset\": \"string\",\n      \"src_quantity\": \"string\",\n      \"dst_quantity\": \"string\",\n      \"min_quantity\": \"string\",\n      \"dark_salt\": \"string\"\n    },\n    \"deadline\": 833,\n    \"router_address\": \"string\",\n    \"filler_wallet_address\": \"string\",\n    \"order_type\": \"PERMIT2\",\n    \"custom_data\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"position_size\": \"string\",\n  \"loan_amount\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a9438ee-0fd4-480f-a2de-c6cd4eb0e17c",
+              "name": "Invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "quotes",
+                    "margin"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"chain_id\": \"42161\",\n  \"wallet_address\": \"0x...\",\n  \"collateral_token\": \"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\n  \"base_token\": \"0x82aF49447D8a07e3bd95BD0d56f35241523fBab1\",\n  \"leverage_ratio\": 2,\n  \"collateral_amount\": \"1000000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"detail\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tristero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a1d509ca-802c-40fc-aa32-b31efaac6379",
+    "name": "Tristero Assets Quotes API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.\n\nContact Support:\n Name: Tristero Support",
+      "type": "text/plain"
+    }
+  }
+}

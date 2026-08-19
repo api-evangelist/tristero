@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tristero Assets Quotes API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{X-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quotes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a spot swap quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tristero.com/v2/quotes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a quote for a cross-chain spot swap. Returns order parameters that can be signed and submitted."
+        },
+        {
+          "info": {
+            "name": "Get a margin quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tristero.com/v2/quotes/margin",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a quote for opening a leveraged margin position. Any token can be used as collateral."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

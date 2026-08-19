@@ -1,0 +1,300 @@
+{
+  "item": [
+    {
+      "id": "d5906f03-6c13-467f-9c5e-168295f0bb17",
+      "name": "Orders",
+      "description": {
+        "content": "Submit and manage orders",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9559548b-9332-4a6c-8f68-5541026c8556",
+          "name": "Submit an order",
+          "request": {
+            "name": "Submit an order",
+            "description": {
+              "content": "Submit a signed order for execution. Supports spot swaps, margin positions, and feather swaps.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signature\": \"<string>\",\n  \"domain\": {\n    \"name\": \"<string>\",\n    \"version\": \"<string>\",\n    \"chainId\": \"<integer>\",\n    \"verifyingContract\": \"<string>\"\n  },\n  \"message\": {\n    \"permitted\": {\n      \"token\": \"<string>\",\n      \"amount\": \"<string>\"\n    },\n    \"spender\": \"<string>\",\n    \"nonce\": \"<string>\",\n    \"deadline\": \"<string>\",\n    \"witness\": {\n      \"sender\": \"<string>\",\n      \"parameters\": {\n        \"src_asset\": \"<string>\",\n        \"dst_asset\": \"<string>\",\n        \"src_quantity\": \"<string>\",\n        \"dst_quantity\": \"<string>\",\n        \"min_quantity\": \"<string>\",\n        \"dark_salt\": \"<string>\"\n      },\n      \"deadline\": \"<string>\",\n      \"target\": \"<string>\",\n      \"filler\": \"<string>\",\n      \"orderType\": \"<string>\",\n      \"customData\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e2436b8e-c3de-4543-916a-fce9a471d225",
+              "name": "Order submitted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signature\": \"0x...\",\n  \"domain\": {\n    \"name\": \"Permit2\",\n    \"version\": \"1\",\n    \"chainId\": \"<integer>\",\n    \"verifyingContract\": \"0x000000000022D473030F116dDEE9F6B43aC78BA3\"\n  },\n  \"message\": {\n    \"permitted\": {\n      \"token\": \"<string>\",\n      \"amount\": \"<string>\"\n    },\n    \"spender\": \"<string>\",\n    \"nonce\": \"<string>\",\n    \"deadline\": \"<string>\",\n    \"witness\": {\n      \"sender\": \"<string>\",\n      \"parameters\": {\n        \"src_asset\": \"<string>\",\n        \"dst_asset\": \"<string>\",\n        \"src_quantity\": \"<string>\",\n        \"dst_quantity\": \"<string>\",\n        \"min_quantity\": \"<string>\",\n        \"dark_salt\": \"<string>\"\n      },\n      \"deadline\": \"<string>\",\n      \"target\": \"<string>\",\n      \"filler\": \"<string>\",\n      \"orderType\": \"<string>\",\n      \"customData\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"order_id\": \"string\",\n  \"status\": \"string\",\n  \"deposit_address\": \"string\",\n  \"detail\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ebe1eccd-dbfe-4c61-90a4-83cb82f00487",
+              "name": "Invalid order data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signature\": \"0x...\",\n  \"domain\": {\n    \"name\": \"Permit2\",\n    \"version\": \"1\",\n    \"chainId\": \"<integer>\",\n    \"verifyingContract\": \"0x000000000022D473030F116dDEE9F6B43aC78BA3\"\n  },\n  \"message\": {\n    \"permitted\": {\n      \"token\": \"<string>\",\n      \"amount\": \"<string>\"\n    },\n    \"spender\": \"<string>\",\n    \"nonce\": \"<string>\",\n    \"deadline\": \"<string>\",\n    \"witness\": {\n      \"sender\": \"<string>\",\n      \"parameters\": {\n        \"src_asset\": \"<string>\",\n        \"dst_asset\": \"<string>\",\n        \"src_quantity\": \"<string>\",\n        \"dst_quantity\": \"<string>\",\n        \"min_quantity\": \"<string>\",\n        \"dark_salt\": \"<string>\"\n      },\n      \"deadline\": \"<string>\",\n      \"target\": \"<string>\",\n      \"filler\": \"<string>\",\n      \"orderType\": \"<string>\",\n      \"customData\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"detail\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d9273c9e-4fc7-48b1-9f90-abd3c680da6b",
+          "name": "Close a margin position",
+          "request": {
+            "name": "Close a margin position",
+            "description": {
+              "content": "Submit a signed request to close a margin position. Can close partially or fully, with cash settlement or swap settlement.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                "close-margin-position"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signature\": \"<string>\",\n  \"domain\": {\n    \"name\": \"<string>\",\n    \"version\": \"<string>\",\n    \"chainId\": \"<integer>\",\n    \"verifyingContract\": \"<string>\"\n  },\n  \"message\": {\n    \"positionId\": \"<integer>\",\n    \"cashSettle\": \"<boolean>\",\n    \"fractionBps\": \"<integer>\",\n    \"authorized\": \"<string>\",\n    \"nonce\": \"<integer>\",\n    \"deadline\": \"<integer>\"\n  },\n  \"chainId\": \"<string>\",\n  \"typed_data\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c61a2151-79bd-4369-986f-4c37508a2aa7",
+              "name": "Close position order submitted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    "close-margin-position"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signature\": \"<string>\",\n  \"domain\": {\n    \"name\": \"Permit2\",\n    \"version\": \"1\",\n    \"chainId\": \"<integer>\",\n    \"verifyingContract\": \"0x000000000022D473030F116dDEE9F6B43aC78BA3\"\n  },\n  \"message\": {\n    \"positionId\": \"<integer>\",\n    \"cashSettle\": \"<boolean>\",\n    \"fractionBps\": \"<integer>\",\n    \"authorized\": \"<string>\",\n    \"nonce\": \"<integer>\",\n    \"deadline\": \"<integer>\"\n  },\n  \"chainId\": \"<string>\",\n  \"typed_data\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"close_order\": {\n    \"id\": \"string\"\n  },\n  \"id\": \"string\",\n  \"order_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tristero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "51872fd5-6644-4196-a98a-1bb5f7ae7e5a",
+    "name": "Tristero Assets Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.\n\nContact Support:\n Name: Tristero Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "item": [
+    {
+      "id": "247b3e82-2bd0-4312-a944-23e9fdd25c6f",
+      "name": "Assets",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5686e1cc-307d-48f7-9268-d0639cdb2902",
+          "name": "List supported assets",
+          "request": {
+            "name": "List supported assets",
+            "description": {
+              "content": "Returns the list of supported assets and their current market prices and liquidity information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "assets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "53daf01e-5772-4c67-88c0-aca59d334dcb",
+              "name": "List of assets with pricing information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "assets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"AssetName\": \"BTC\",\n    \"UsdMarketMid\": 65432.18,\n    \"HalfSpread\": 0.0012,\n    \"MarketHalfSpread\": 0.0008,\n    \"HalfFee\": 0.00015,\n    \"MinAmount\": 0.001,\n    \"MaxOutput\": 10.5,\n    \"MaxInput\": 15,\n    \"PriceImpactRate\": 0.00005,\n    \"CapacityFraction\": 0.73,\n    \"TargetBalance\": 20,\n    \"CurrentBalance\": 14.6,\n    \"FundingAddress\": \"bc1qfeatherfundingaddress1234567890abcdef\"\n  },\n  {\n    \"AssetName\": \"ETH\",\n    \"UsdMarketMid\": 3456.78,\n    \"HalfSpread\": 0.0008,\n    \"MarketHalfSpread\": 0.0005,\n    \"HalfFee\": 0.0025,\n    \"MinAmount\": 0.01,\n    \"MaxOutput\": 150,\n    \"MaxInput\": 200,\n    \"PriceImpactRate\": 0.00002,\n    \"CapacityFraction\": 0.85,\n    \"TargetBalance\": 200,\n    \"CurrentBalance\": 170,\n    \"FundingAddress\": \"0xFeatherFundingAddress1234567890abcdef1234\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tristero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "602bc9f5-9c8c-4f84-98e0-ccae8faca542",
+    "name": "Tristero Assets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.\n\nContact Support:\n Name: Tristero Support",
+      "type": "text/plain"
+    }
+  }
+}

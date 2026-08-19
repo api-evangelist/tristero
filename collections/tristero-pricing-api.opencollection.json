@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tristero Assets Pricing API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{X-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pricing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get price quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tristero.com/v2/price",
+            "params": [
+              {
+                "name": "input_asset",
+                "value": "",
+                "type": "query",
+                "description": "Asset you are sending (e.g. BTC)"
+              },
+              {
+                "name": "output_asset",
+                "value": "",
+                "type": "query",
+                "description": "Asset you want to receive (e.g. ETH)"
+              },
+              {
+                "name": "input_amount",
+                "value": "",
+                "type": "query",
+                "description": "If provided, compute the expected output for this input amount"
+              },
+              {
+                "name": "output_amount",
+                "value": "",
+                "type": "query",
+                "description": "If provided, estimate the required input to receive this output amount"
+              }
+            ]
+          },
+          "docs": "Returns a live price quote for a swap between two assets. Optionally computes a worked example for a specific input or output amount."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
