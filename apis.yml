@@ -87,6 +87,8 @@ apis:
   humanURL: https://docs.tristero.com/docs/tristero
   baseURL: https://api.tristero.com/v2
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
