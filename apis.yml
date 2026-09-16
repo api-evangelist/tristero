@@ -75,26 +75,6 @@ apis:
     url: https://docs.tristero.com/docs/feather/api/getAssets
   - type: GettingStarted
     url: https://docs.tristero.com/docs/feather/quickstart
-- aid: tristero:tristero-margin-api
-  name: Tristero Margin API
-  description: Margin position management
-  humanURL: https://docs.tristero.com/docs/tristero
-  baseURL: https://api.tristero.com/v2
-  tags:
-  - Margin
-  properties:
-  - type: OpenAPI
-    url: openapi/tristero-margin-api-openapi.yml
-  - type: Documentation
-    url: https://docs.tristero.com/docs/tristero
-  - type: APIReference
-    url: https://docs.tristero.com/docs/tristero/api/getQuote
-  - type: Documentation
-    url: https://docs.tristero.com/docs/feather
-  - type: APIReference
-    url: https://docs.tristero.com/docs/feather/api/getAssets
-  - type: GettingStarted
-    url: https://docs.tristero.com/docs/feather/quickstart
 - aid: tristero:tristero-orders-api
   name: Tristero Orders API
   description: Submit and manage orders
