@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Tristero Assets Quotes API
+  title: Tristero Quotes API
   description: Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.
   version: 2.0.0
   contact:
@@ -102,6 +102,47 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        detail:
+          type: object
+          description: Additional error details
+    QuoteResponse:
+      type: object
+      properties:
+        src_token:
+          $ref: '#/components/schemas/TokenInfo'
+        dst_token:
+          $ref: '#/components/schemas/TokenInfo'
+        order_data:
+          $ref: '#/components/schemas/OrderData'
+        order_type:
+          type: string
+          enum:
+          - FEATHER
+          - PERMIT2
+          description: Type of swap mechanism
+        order_id:
+          type: string
+          description: Unique order identifier
+        router_address:
+          type: string
+          description: Router contract address for Permit2 approvals
+    TokenMetadata:
+      type: object
+      properties:
+        address:
+          type: string
+        symbol:
+          type: string
+        name:
+          type: string
+        decimals:
+          type: integer
     QuoteRequest:
       type: object
       required:
@@ -141,17 +182,6 @@ components:
           type: string
           description: Destination wallet address
           example: 0x...
-    TokenMetadata:
-      type: object
-      properties:
-        address:
-          type: string
-        symbol:
-          type: string
-        name:
-          type: string
-        decimals:
-          type: integer
     TokenInfo:
       type: object
       properties:
@@ -163,6 +193,41 @@ components:
           type: string
         decimals:
           type: integer
+    MarginQuoteRequest:
+      type: object
+      required:
+      - chain_id
+      - wallet_address
+      - collateral_token
+      - base_token
+      - leverage_ratio
+      - collateral_amount
+      properties:
+        chain_id:
+          type: string
+          description: Chain ID where position will be opened
+          example: '42161'
+        wallet_address:
+          type: string
+          description: User's wallet address
+          example: 0x...
+        collateral_token:
+          type: string
+          description: Collateral token address (any ERC20, e.g., USDC, USDT0, WETH)
+          example: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
+        base_token:
+          type: string
+          description: Base token address for the position (e.g., WETH for long ETH)
+          example: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
+        leverage_ratio:
+          type: integer
+          description: Leverage multiplier (e.g., 2 for 2x)
+          minimum: 1
+          example: 2
+        collateral_amount:
+          type: string
+          description: Collateral amount in raw units
+          example: '1000000'
     MarginQuoteResponse:
       type: object
       properties:
@@ -215,15 +280,6 @@ components:
           items:
             type: string
             format: binary
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
-        detail:
-          type: object
-          description: Additional error details
     OrderParameters:
       type: object
       properties:
@@ -245,62 +301,6 @@ components:
         dark_salt:
           type: string
           description: Random salt for order uniqueness
-    MarginQuoteRequest:
-      type: object
-      required:
-      - chain_id
-      - wallet_address
-      - collateral_token
-      - base_token
-      - leverage_ratio
-      - collateral_amount
-      properties:
-        chain_id:
-          type: string
-          description: Chain ID where position will be opened
-          example: '42161'
-        wallet_address:
-          type: string
-          description: User's wallet address
-          example: 0x...
-        collateral_token:
-          type: string
-          description: Collateral token address (any ERC20, e.g., USDC, USDT0, WETH)
-          example: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
-        base_token:
-          type: string
-          description: Base token address for the position (e.g., WETH for long ETH)
-          example: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
-        leverage_ratio:
-          type: integer
-          description: Leverage multiplier (e.g., 2 for 2x)
-          minimum: 1
-          example: 2
-        collateral_amount:
-          type: string
-          description: Collateral amount in raw units
-          example: '1000000'
-    QuoteResponse:
-      type: object
-      properties:
-        src_token:
-          $ref: '#/components/schemas/TokenInfo'
-        dst_token:
-          $ref: '#/components/schemas/TokenInfo'
-        order_data:
-          $ref: '#/components/schemas/OrderData'
-        order_type:
-          type: string
-          enum:
-          - FEATHER
-          - PERMIT2
-          description: Type of swap mechanism
-        order_id:
-          type: string
-          description: Unique order identifier
-        router_address:
-          type: string
-          description: Router contract address for Permit2 approvals
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -1,22 +1,14 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Tristero Assets Pricing API
-  description: Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.
-  version: 2.0.0
+  title: Feather Pricing API
+  description: A simple HTTP/JSON API for cross-chain swaps. No authentication required.
+  version: 1.0.0
   contact:
     name: Tristero Support
     url: https://tristero.com
 servers:
-- url: https://api.tristero.com/v2
-  description: Production
-- url: https://staging-api.tristero.com/v2
-  description: Staging
-- url: http://localhost:8060
-  description: Local (Quoter)
-- url: http://localhost:8070
-  description: Local (Filler)
-security:
-- ApiKeyAuth: []
+- url: https://feather-prod.tristero.com
+  description: Production server
 tags:
 - name: Pricing
 paths:
@@ -351,12 +343,3 @@ components:
       - InputUsd
       - OutputAmount
       - OutputUsd
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API key for authentication (if required by deployment)
-externalDocs:
-  description: Tristero Python SDK Documentation
-  url: https://pypi.org/project/tristero/

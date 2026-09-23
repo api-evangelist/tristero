@@ -1,26 +1,36 @@
 {
   "provider": "tristero",
   "sources": [
-    "tristero-assets-api-openapi.yml",
-    "tristero-margin-api-openapi.yml",
-    "tristero-orders-api-openapi.yml",
-    "tristero-pricing-api-openapi.yml",
-    "tristero-quotes-api-openapi.yml",
-    "tristero-trading-api-openapi.yml",
-    "tristero-wallets-api-openapi.yml"
+    "_original/tristero-api-openapi.json",
+    "_original/tristero-feather-api-openapi.json"
   ],
   "outputs": [
-    "tristero-assets-api-openapi.yml",
-    "tristero-margin-api-openapi.yml",
     "tristero-orders-api-openapi.yml",
-    "tristero-pricing-api-openapi.yml",
     "tristero-quotes-api-openapi.yml",
-    "tristero-trading-api-openapi.yml",
-    "tristero-wallets-api-openapi.yml"
+    "tristero-wallets-api-openapi.yml",
+    "tristero-assets-api-openapi.yml",
+    "tristero-pricing-api-openapi.yml",
+    "tristero-trading-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "tristero-api-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "tristero-api-openapi.json: multi-axis tagging (4 tags, 3 first tags, 1.67x duplication over 6 operations) \u2014 split on first tag, 4 operations narrowed",
+    "tristero-feather-api-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tristero-feather-api-openapi.json: declared missing tag: Assets",
+    "tristero-feather-api-openapi.json: declared missing tag: Pricing",
+    "tristero-feather-api-openapi.json: declared missing tag: Trading",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "tristero-assets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tristero-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tristero-pricing-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tristero-quotes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tristero-trading-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tristero-wallets-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

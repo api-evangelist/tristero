@@ -1,22 +1,14 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Tristero Assets Trading API
-  description: Tristero is a cross-chain trading protocol supporting spot swaps, margin positions, and feather (UTXO-based) swaps. This API provides endpoints for requesting quotes, submitting orders, managing margin positions, and real-time updates via WebSocket.
-  version: 2.0.0
+  title: Feather Trading API
+  description: A simple HTTP/JSON API for cross-chain swaps. No authentication required.
+  version: 1.0.0
   contact:
     name: Tristero Support
     url: https://tristero.com
 servers:
-- url: https://api.tristero.com/v2
-  description: Production
-- url: https://staging-api.tristero.com/v2
-  description: Staging
-- url: http://localhost:8060
-  description: Local (Quoter)
-- url: http://localhost:8070
-  description: Local (Filler)
-security:
-- ApiKeyAuth: []
+- url: https://feather-prod.tristero.com
+  description: Production server
 tags:
 - name: Trading
 paths:
@@ -272,40 +264,24 @@ paths:
                 error: 'Trade not found: trade_xyz789invalid'
 components:
   schemas:
-    TradeRequest:
+    Error:
       type: object
       example:
-        InputAsset: BTC
-        OutputAsset: ETH
-        OutputAddress: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
-        ReturnAddress: bc1qreturnaddress1234567890abcdef
-        MaxSlippage: 0.01
+        result: error
+        error: Invalid output address format for ETH
       properties:
-        InputAsset:
+        result:
           type: string
-          description: Asset you are sending (e.g. "BTC")
-          example: BTC
-        OutputAsset:
+          enum:
+          - error
+          example: error
+        error:
           type: string
-          description: Asset you want to receive (e.g. "ETH")
-          example: ETH
-        OutputAddress:
-          type: string
-          description: Address on the output chain to receive funds
-          example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
-        ReturnAddress:
-          type: string
-          description: Address on the input chain to refund to if execution fails
-          example: bc1qreturnaddress1234567890abcdef
-        MaxSlippage:
-          type: number
-          format: float
-          description: Maximum acceptable rate degradation as a fraction (e.g. 0.01 = 1%). Default 0 = no limit.
-          example: 0.01
+          description: Description of the error
+          example: Invalid output address format for ETH
       required:
-      - InputAsset
-      - OutputAsset
-      - OutputAddress
+      - result
+      - error
     PriceInfo:
       type: object
       example:
@@ -383,6 +359,123 @@ components:
       - MaxInput
       - MinInput
       - MaxOutput
+    AssetPrice:
+      type: object
+      example:
+        AssetName: BTC
+        UsdMarketMid: 65432.18
+        HalfSpread: 0.0012
+        MarketHalfSpread: 0.0008
+        HalfFee: 0.00015
+        MinAmount: 0.001
+        MaxOutput: 10.5
+        MaxInput: 15.0
+        PriceImpactRate: 5.0e-05
+        CapacityFraction: 0.73
+        TargetBalance: 20.0
+        CurrentBalance: 14.6
+        FundingAddress: bc1qfeatherfundingaddress1234567890abcdef
+      properties:
+        AssetName:
+          type: string
+          description: Asset identifier (e.g. "BTC")
+          example: BTC
+        UsdMarketMid:
+          type: number
+          format: float
+          description: Current USD mid-market price
+          example: 65432.18
+        HalfSpread:
+          type: number
+          format: float
+          description: Half the bid-ask spread applied to trades
+        MarketHalfSpread:
+          type: number
+          format: float
+          description: External market half-spread for reference
+        HalfFee:
+          type: number
+          format: float
+          description: Estimated half of the on-chain fee in asset units
+        MinAmount:
+          type: number
+          format: float
+          description: Minimum deposit amount Feather will process
+        MaxOutput:
+          type: number
+          format: float
+          description: Maximum amount Feather will pay out of this asset
+        MaxInput:
+          type: number
+          format: float
+          description: Maximum amount Feather will accept as input
+        PriceImpactRate:
+          type: number
+          format: float
+          description: λ — rate of price adjustment per unit traded
+        CapacityFraction:
+          type: number
+          format: float
+          description: Current balance as a fraction of target
+        TargetBalance:
+          type: number
+          format: float
+          description: Target balance in asset units
+        CurrentBalance:
+          type: number
+          format: float
+          description: Current liquid balance in asset units
+        FundingAddress:
+          type: string
+          description: Feather's main address for this asset (for funding/monitoring)
+      required:
+      - AssetName
+      - UsdMarketMid
+      - HalfSpread
+      - MarketHalfSpread
+      - HalfFee
+      - MinAmount
+      - MaxOutput
+      - MaxInput
+      - PriceImpactRate
+      - CapacityFraction
+      - TargetBalance
+      - CurrentBalance
+      - FundingAddress
+    TradeRequest:
+      type: object
+      example:
+        InputAsset: BTC
+        OutputAsset: ETH
+        OutputAddress: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+        ReturnAddress: bc1qreturnaddress1234567890abcdef
+        MaxSlippage: 0.01
+      properties:
+        InputAsset:
+          type: string
+          description: Asset you are sending (e.g. "BTC")
+          example: BTC
+        OutputAsset:
+          type: string
+          description: Asset you want to receive (e.g. "ETH")
+          example: ETH
+        OutputAddress:
+          type: string
+          description: Address on the output chain to receive funds
+          example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+        ReturnAddress:
+          type: string
+          description: Address on the input chain to refund to if execution fails
+          example: bc1qreturnaddress1234567890abcdef
+        MaxSlippage:
+          type: number
+          format: float
+          description: Maximum acceptable rate degradation as a fraction (e.g. 0.01 = 1%). Default 0 = no limit.
+          example: 0.01
+      required:
+      - InputAsset
+      - OutputAsset
+      - OutputAddress
     Trade:
       type: object
       example:
@@ -520,89 +613,6 @@ components:
       - QuotedPrice
       - ExecutionState
       - PriceInfo
-    AssetPrice:
-      type: object
-      example:
-        AssetName: BTC
-        UsdMarketMid: 65432.18
-        HalfSpread: 0.0012
-        MarketHalfSpread: 0.0008
-        HalfFee: 0.00015
-        MinAmount: 0.001
-        MaxOutput: 10.5
-        MaxInput: 15.0
-        PriceImpactRate: 5.0e-05
-        CapacityFraction: 0.73
-        TargetBalance: 20.0
-        CurrentBalance: 14.6
-        FundingAddress: bc1qfeatherfundingaddress1234567890abcdef
-      properties:
-        AssetName:
-          type: string
-          description: Asset identifier (e.g. "BTC")
-          example: BTC
-        UsdMarketMid:
-          type: number
-          format: float
-          description: Current USD mid-market price
-          example: 65432.18
-        HalfSpread:
-          type: number
-          format: float
-          description: Half the bid-ask spread applied to trades
-        MarketHalfSpread:
-          type: number
-          format: float
-          description: External market half-spread for reference
-        HalfFee:
-          type: number
-          format: float
-          description: Estimated half of the on-chain fee in asset units
-        MinAmount:
-          type: number
-          format: float
-          description: Minimum deposit amount Feather will process
-        MaxOutput:
-          type: number
-          format: float
-          description: Maximum amount Feather will pay out of this asset
-        MaxInput:
-          type: number
-          format: float
-          description: Maximum amount Feather will accept as input
-        PriceImpactRate:
-          type: number
-          format: float
-          description: λ — rate of price adjustment per unit traded
-        CapacityFraction:
-          type: number
-          format: float
-          description: Current balance as a fraction of target
-        TargetBalance:
-          type: number
-          format: float
-          description: Target balance in asset units
-        CurrentBalance:
-          type: number
-          format: float
-          description: Current liquid balance in asset units
-        FundingAddress:
-          type: string
-          description: Feather's main address for this asset (for funding/monitoring)
-      required:
-      - AssetName
-      - UsdMarketMid
-      - HalfSpread
-      - MarketHalfSpread
-      - HalfFee
-      - MinAmount
-      - MaxOutput
-      - MaxInput
-      - PriceImpactRate
-      - CapacityFraction
-      - TargetBalance
-      - CurrentBalance
-      - FundingAddress
     ExecutedTrade:
       type: object
       example:
@@ -647,30 +657,3 @@ components:
       - InputUsd
       - OutputAmount
       - OutputUsd
-    Error:
-      type: object
-      example:
-        result: error
-        error: Invalid output address format for ETH
-      properties:
-        result:
-          type: string
-          enum:
-          - error
-          example: error
-        error:
-          type: string
-          description: Description of the error
-          example: Invalid output address format for ETH
-      required:
-      - result
-      - error
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API key for authentication (if required by deployment)
-externalDocs:
-  description: Tristero Python SDK Documentation
-  url: https://pypi.org/project/tristero/
