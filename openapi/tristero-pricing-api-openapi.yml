@@ -139,6 +139,50 @@ paths:
                       Warning: ''
 components:
   schemas:
+    ExecutedTrade:
+      type: object
+      example:
+        InputAmount: 0.5
+        InputUsd: 32716.09
+        OutputAmount: 9.42
+        OutputUsd: 32562.86
+        Overpay: 0.0
+        Warning: ''
+      properties:
+        InputAmount:
+          type: number
+          format: float
+          description: Input amount used in the calculation
+          example: 0.5
+        InputUsd:
+          type: number
+          format: float
+          description: USD value of the input
+          example: 32716.09
+        OutputAmount:
+          type: number
+          format: float
+          description: Expected output amount
+          example: 9.42
+        OutputUsd:
+          type: number
+          format: float
+          description: USD value of the output
+          example: 32562.86
+        Overpay:
+          type: number
+          format: float
+          description: Amount exceeding the cap that would be returned
+          example: 0.0
+        Warning:
+          type: string
+          description: Describes why execution would be degraded
+          example: ''
+      required:
+      - InputAmount
+      - InputUsd
+      - OutputAmount
+      - OutputUsd
     PriceInfo:
       type: object
       example:
@@ -299,47 +343,3 @@ components:
       - TargetBalance
       - CurrentBalance
       - FundingAddress
-    ExecutedTrade:
-      type: object
-      example:
-        InputAmount: 0.5
-        InputUsd: 32716.09
-        OutputAmount: 9.42
-        OutputUsd: 32562.86
-        Overpay: 0.0
-        Warning: ''
-      properties:
-        InputAmount:
-          type: number
-          format: float
-          description: Input amount used in the calculation
-          example: 0.5
-        InputUsd:
-          type: number
-          format: float
-          description: USD value of the input
-          example: 32716.09
-        OutputAmount:
-          type: number
-          format: float
-          description: Expected output amount
-          example: 9.42
-        OutputUsd:
-          type: number
-          format: float
-          description: USD value of the output
-          example: 32562.86
-        Overpay:
-          type: number
-          format: float
-          description: Amount exceeding the cap that would be returned
-          example: 0.0
-        Warning:
-          type: string
-          description: Describes why execution would be degraded
-          example: ''
-      required:
-      - InputAmount
-      - InputUsd
-      - OutputAmount
-      - OutputUsd

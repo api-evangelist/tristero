@@ -78,30 +78,41 @@ paths:
                 $ref: '#/components/schemas/ClosePositionResponse'
 components:
   schemas:
-    FeatherOrderSubmission:
+    PermitWitnessTransferFrom:
+      type: object
+      description: EIP-712 PermitWitnessTransferFrom message structure
+      properties:
+        permitted:
+          $ref: '#/components/schemas/TokenPermissions'
+        spender:
+          type: string
+          description: Address authorized to spend tokens
+        nonce:
+          type: string
+          description: Unique nonce to prevent replay
+        deadline:
+          type: string
+          description: Signature expiration timestamp
+        witness:
+          $ref: '#/components/schemas/SignedOrder'
+    MarginOrderSubmission:
       type: object
       required:
-      - client_id
-      - src_chain
-      - dst_chain
-      - dst_address
-      - amount
+      - signature
+      - domain
+      - message
+      - typed_data
       properties:
-        client_id:
+        signature:
           type: string
-          description: Client identifier
-        src_chain:
-          type: string
-          description: Source chain ID
-        dst_chain:
-          type: string
-          description: Destination chain ID
-        dst_address:
-          type: string
-          description: Destination address for funds
-        amount:
-          type: integer
-          description: Amount to swap
+          description: EIP-712 signature
+        domain:
+          $ref: '#/components/schemas/EIP712Domain'
+        message:
+          $ref: '#/components/schemas/PermitWitnessTransferFrom'
+        typed_data:
+          type: object
+          description: Full typed data structure used for signing
     ErrorResponse:
       type: object
       properties:
@@ -111,6 +122,89 @@ components:
         detail:
           type: object
           description: Additional error details
+    OrderSubmissionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Order ID for tracking
+        order_id:
+          type: string
+          description: Order ID (alternative field)
+        status:
+          type: string
+          description: Initial order status
+        deposit_address:
+          type: string
+          description: 'For Feather swaps: address to send funds to'
+        detail:
+          type: object
+          description: Error details if submission failed
+    EIP712Domain:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Permit2
+        version:
+          type: string
+          example: '1'
+        chainId:
+          type: integer
+          description: Chain ID where the contract is deployed
+        verifyingContract:
+          type: string
+          description: Contract address that verifies the signature
+          example: '0x000000000022D473030F116dDEE9F6B43aC78BA3'
+    ClosePositionResponse:
+      type: object
+      properties:
+        close_order:
+          type: object
+          properties:
+            id:
+              type: string
+              description: Close order ID
+        id:
+          type: string
+        order_id:
+          type: string
+    Permit2OrderSubmission:
+      type: object
+      required:
+      - signature
+      - domain
+      - message
+      properties:
+        signature:
+          type: string
+          description: EIP-712 signature (0x-prefixed hex)
+          example: 0x...
+        domain:
+          $ref: '#/components/schemas/EIP712Domain'
+        message:
+          $ref: '#/components/schemas/PermitWitnessTransferFrom'
+    OrderParameters:
+      type: object
+      properties:
+        src_asset:
+          type: string
+          description: Source token address
+        dst_asset:
+          type: string
+          description: Destination token address
+        src_quantity:
+          type: string
+          description: Source amount
+        dst_quantity:
+          type: string
+          description: Expected destination amount
+        min_quantity:
+          type: string
+          description: Minimum acceptable output (slippage protection)
+        dark_salt:
+          type: string
+          description: Random salt for order uniqueness
     SignedOrder:
       type: object
       properties:
@@ -138,31 +232,30 @@ components:
           type: array
           items:
             type: string
-    TokenPermissions:
+    FeatherOrderSubmission:
       type: object
+      required:
+      - client_id
+      - src_chain
+      - dst_chain
+      - dst_address
+      - amount
       properties:
-        token:
+        client_id:
           type: string
-          description: Token contract address
+          description: Client identifier
+        src_chain:
+          type: string
+          description: Source chain ID
+        dst_chain:
+          type: string
+          description: Destination chain ID
+        dst_address:
+          type: string
+          description: Destination address for funds
         amount:
-          type: string
-          description: Permitted amount
-    EIP712Domain:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Permit2
-        version:
-          type: string
-          example: '1'
-        chainId:
           type: integer
-          description: Chain ID where the contract is deployed
-        verifyingContract:
-          type: string
-          description: Contract address that verifies the signature
-          example: '0x000000000022D473030F116dDEE9F6B43aC78BA3'
+          description: Amount to swap
     ClosePositionSubmission:
       type: object
       required:
@@ -205,108 +298,15 @@ components:
         typed_data:
           type: object
           description: Complete typed data for verification
-    MarginOrderSubmission:
-      type: object
-      required:
-      - signature
-      - domain
-      - message
-      - typed_data
-      properties:
-        signature:
-          type: string
-          description: EIP-712 signature
-        domain:
-          $ref: '#/components/schemas/EIP712Domain'
-        message:
-          $ref: '#/components/schemas/PermitWitnessTransferFrom'
-        typed_data:
-          type: object
-          description: Full typed data structure used for signing
-    Permit2OrderSubmission:
-      type: object
-      required:
-      - signature
-      - domain
-      - message
-      properties:
-        signature:
-          type: string
-          description: EIP-712 signature (0x-prefixed hex)
-          example: 0x...
-        domain:
-          $ref: '#/components/schemas/EIP712Domain'
-        message:
-          $ref: '#/components/schemas/PermitWitnessTransferFrom'
-    ClosePositionResponse:
+    TokenPermissions:
       type: object
       properties:
-        close_order:
-          type: object
-          properties:
-            id:
-              type: string
-              description: Close order ID
-        id:
+        token:
           type: string
-        order_id:
+          description: Token contract address
+        amount:
           type: string
-    PermitWitnessTransferFrom:
-      type: object
-      description: EIP-712 PermitWitnessTransferFrom message structure
-      properties:
-        permitted:
-          $ref: '#/components/schemas/TokenPermissions'
-        spender:
-          type: string
-          description: Address authorized to spend tokens
-        nonce:
-          type: string
-          description: Unique nonce to prevent replay
-        deadline:
-          type: string
-          description: Signature expiration timestamp
-        witness:
-          $ref: '#/components/schemas/SignedOrder'
-    OrderSubmissionResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Order ID for tracking
-        order_id:
-          type: string
-          description: Order ID (alternative field)
-        status:
-          type: string
-          description: Initial order status
-        deposit_address:
-          type: string
-          description: 'For Feather swaps: address to send funds to'
-        detail:
-          type: object
-          description: Error details if submission failed
-    OrderParameters:
-      type: object
-      properties:
-        src_asset:
-          type: string
-          description: Source token address
-        dst_asset:
-          type: string
-          description: Destination token address
-        src_quantity:
-          type: string
-          description: Source amount
-        dst_quantity:
-          type: string
-          description: Expected destination amount
-        min_quantity:
-          type: string
-          description: Minimum acceptable output (slippage protection)
-        dark_salt:
-          type: string
-          description: Random salt for order uniqueness
+          description: Permitted amount
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

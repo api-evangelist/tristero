@@ -102,44 +102,14 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    ErrorResponse:
+    TokenInfo:
       type: object
       properties:
-        error:
-          type: string
-          description: Error message
-        detail:
-          type: object
-          description: Additional error details
-    QuoteResponse:
-      type: object
-      properties:
-        src_token:
-          $ref: '#/components/schemas/TokenInfo'
-        dst_token:
-          $ref: '#/components/schemas/TokenInfo'
-        order_data:
-          $ref: '#/components/schemas/OrderData'
-        order_type:
-          type: string
-          enum:
-          - FEATHER
-          - PERMIT2
-          description: Type of swap mechanism
-        order_id:
-          type: string
-          description: Unique order identifier
-        router_address:
-          type: string
-          description: Router contract address for Permit2 approvals
-    TokenMetadata:
-      type: object
-      properties:
+        chain_id:
+          type: integer
         address:
           type: string
         symbol:
-          type: string
-        name:
           type: string
         decimals:
           type: integer
@@ -182,17 +152,27 @@ components:
           type: string
           description: Destination wallet address
           example: 0x...
-    TokenInfo:
+    QuoteResponse:
       type: object
       properties:
-        chain_id:
-          type: integer
-        address:
+        src_token:
+          $ref: '#/components/schemas/TokenInfo'
+        dst_token:
+          $ref: '#/components/schemas/TokenInfo'
+        order_data:
+          $ref: '#/components/schemas/OrderData'
+        order_type:
           type: string
-        symbol:
+          enum:
+          - FEATHER
+          - PERMIT2
+          description: Type of swap mechanism
+        order_id:
           type: string
-        decimals:
-          type: integer
+          description: Unique order identifier
+        router_address:
+          type: string
+          description: Router contract address for Permit2 approvals
     MarginQuoteRequest:
       type: object
       required:
@@ -228,6 +208,72 @@ components:
           type: string
           description: Collateral amount in raw units
           example: '1000000'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        detail:
+          type: object
+          description: Additional error details
+    TokenMetadata:
+      type: object
+      properties:
+        address:
+          type: string
+        symbol:
+          type: string
+        name:
+          type: string
+        decimals:
+          type: integer
+    OrderParameters:
+      type: object
+      properties:
+        src_asset:
+          type: string
+          description: Source token address
+        dst_asset:
+          type: string
+          description: Destination token address
+        src_quantity:
+          type: string
+          description: Source amount
+        dst_quantity:
+          type: string
+          description: Expected destination amount
+        min_quantity:
+          type: string
+          description: Minimum acceptable output (slippage protection)
+        dark_salt:
+          type: string
+          description: Random salt for order uniqueness
+    OrderData:
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/OrderParameters'
+        deadline:
+          type: integer
+          description: Unix timestamp deadline
+        router_address:
+          type: string
+          description: Router contract address
+        filler_wallet_address:
+          type: string
+          description: Filler wallet address
+        order_type:
+          type: string
+          enum:
+          - FEATHER
+          - PERMIT2
+          - MARGIN
+        custom_data:
+          type: array
+          items:
+            type: string
+            format: binary
     MarginQuoteResponse:
       type: object
       properties:
@@ -255,52 +301,6 @@ components:
         loan_amount:
           type: string
           description: Amount being borrowed
-    OrderData:
-      type: object
-      properties:
-        parameters:
-          $ref: '#/components/schemas/OrderParameters'
-        deadline:
-          type: integer
-          description: Unix timestamp deadline
-        router_address:
-          type: string
-          description: Router contract address
-        filler_wallet_address:
-          type: string
-          description: Filler wallet address
-        order_type:
-          type: string
-          enum:
-          - FEATHER
-          - PERMIT2
-          - MARGIN
-        custom_data:
-          type: array
-          items:
-            type: string
-            format: binary
-    OrderParameters:
-      type: object
-      properties:
-        src_asset:
-          type: string
-          description: Source token address
-        dst_asset:
-          type: string
-          description: Destination token address
-        src_quantity:
-          type: string
-          description: Source amount
-        dst_quantity:
-          type: string
-          description: Expected destination amount
-        min_quantity:
-          type: string
-          description: Minimum acceptable output (slippage protection)
-        dark_salt:
-          type: string
-          description: Random salt for order uniqueness
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
