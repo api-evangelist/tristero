@@ -102,56 +102,42 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    TokenInfo:
+    OrderData:
       type: object
       properties:
-        chain_id:
+        parameters:
+          $ref: '#/components/schemas/OrderParameters'
+        deadline:
           type: integer
+          description: Unix timestamp deadline
+        router_address:
+          type: string
+          description: Router contract address
+        filler_wallet_address:
+          type: string
+          description: Filler wallet address
+        order_type:
+          type: string
+          enum:
+          - FEATHER
+          - PERMIT2
+          - MARGIN
+        custom_data:
+          type: array
+          items:
+            type: string
+            format: binary
+    TokenMetadata:
+      type: object
+      properties:
         address:
           type: string
         symbol:
           type: string
+        name:
+          type: string
         decimals:
           type: integer
-    QuoteRequest:
-      type: object
-      required:
-      - src_chain_id
-      - src_token_address
-      - src_token_quantity
-      - src_wallet_address
-      - dst_chain_id
-      - dst_token_address
-      - dst_wallet_address
-      properties:
-        src_chain_id:
-          type: string
-          description: Source chain ID (e.g., '1' for Ethereum, '42161' for Arbitrum)
-          example: '42161'
-        src_token_address:
-          type: string
-          description: Source token address or 'native' for gas token
-          example: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
-        src_token_quantity:
-          type: string
-          description: Amount to swap in raw units (wei/token decimals)
-          example: '1000000'
-        src_wallet_address:
-          type: string
-          description: Source wallet address
-          example: 0x...
-        dst_chain_id:
-          type: string
-          description: Destination chain ID
-          example: '8453'
-        dst_token_address:
-          type: string
-          description: Destination token address or 'native'
-          example: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2'
-        dst_wallet_address:
-          type: string
-          description: Destination wallet address
-          example: 0x...
     QuoteResponse:
       type: object
       properties:
@@ -208,26 +194,45 @@ components:
           type: string
           description: Collateral amount in raw units
           example: '1000000'
-    ErrorResponse:
+    QuoteRequest:
       type: object
+      required:
+      - src_chain_id
+      - src_token_address
+      - src_token_quantity
+      - src_wallet_address
+      - dst_chain_id
+      - dst_token_address
+      - dst_wallet_address
       properties:
-        error:
+        src_chain_id:
           type: string
-          description: Error message
-        detail:
-          type: object
-          description: Additional error details
-    TokenMetadata:
-      type: object
-      properties:
-        address:
+          description: Source chain ID (e.g., '1' for Ethereum, '42161' for Arbitrum)
+          example: '42161'
+        src_token_address:
           type: string
-        symbol:
+          description: Source token address or 'native' for gas token
+          example: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'
+        src_token_quantity:
           type: string
-        name:
+          description: Amount to swap in raw units (wei/token decimals)
+          example: '1000000'
+        src_wallet_address:
           type: string
-        decimals:
-          type: integer
+          description: Source wallet address
+          example: 0x...
+        dst_chain_id:
+          type: string
+          description: Destination chain ID
+          example: '8453'
+        dst_token_address:
+          type: string
+          description: Destination token address or 'native'
+          example: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2'
+        dst_wallet_address:
+          type: string
+          description: Destination wallet address
+          example: 0x...
     OrderParameters:
       type: object
       properties:
@@ -249,31 +254,6 @@ components:
         dark_salt:
           type: string
           description: Random salt for order uniqueness
-    OrderData:
-      type: object
-      properties:
-        parameters:
-          $ref: '#/components/schemas/OrderParameters'
-        deadline:
-          type: integer
-          description: Unix timestamp deadline
-        router_address:
-          type: string
-          description: Router contract address
-        filler_wallet_address:
-          type: string
-          description: Filler wallet address
-        order_type:
-          type: string
-          enum:
-          - FEATHER
-          - PERMIT2
-          - MARGIN
-        custom_data:
-          type: array
-          items:
-            type: string
-            format: binary
     MarginQuoteResponse:
       type: object
       properties:
@@ -301,6 +281,26 @@ components:
         loan_amount:
           type: string
           description: Amount being borrowed
+    TokenInfo:
+      type: object
+      properties:
+        chain_id:
+          type: integer
+        address:
+          type: string
+        symbol:
+          type: string
+        decimals:
+          type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        detail:
+          type: object
+          description: Additional error details
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
