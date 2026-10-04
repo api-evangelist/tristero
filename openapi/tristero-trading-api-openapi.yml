@@ -264,6 +264,24 @@ paths:
                 error: 'Trade not found: trade_xyz789invalid'
 components:
   schemas:
+    Error:
+      type: object
+      example:
+        result: error
+        error: Invalid output address format for ETH
+      properties:
+        result:
+          type: string
+          enum:
+          - error
+          example: error
+        error:
+          type: string
+          description: Description of the error
+          example: Invalid output address format for ETH
+      required:
+      - result
+      - error
     Trade:
       type: object
       example:
@@ -478,6 +496,84 @@ components:
       - MaxInput
       - MinInput
       - MaxOutput
+    ExecutedTrade:
+      type: object
+      example:
+        InputAmount: 0.5
+        InputUsd: 32716.09
+        OutputAmount: 9.42
+        OutputUsd: 32562.86
+        Overpay: 0.0
+        Warning: ''
+      properties:
+        InputAmount:
+          type: number
+          format: float
+          description: Input amount used in the calculation
+          example: 0.5
+        InputUsd:
+          type: number
+          format: float
+          description: USD value of the input
+          example: 32716.09
+        OutputAmount:
+          type: number
+          format: float
+          description: Expected output amount
+          example: 9.42
+        OutputUsd:
+          type: number
+          format: float
+          description: USD value of the output
+          example: 32562.86
+        Overpay:
+          type: number
+          format: float
+          description: Amount exceeding the cap that would be returned
+          example: 0.0
+        Warning:
+          type: string
+          description: Describes why execution would be degraded
+          example: ''
+      required:
+      - InputAmount
+      - InputUsd
+      - OutputAmount
+      - OutputUsd
+    TradeRequest:
+      type: object
+      example:
+        InputAsset: BTC
+        OutputAsset: ETH
+        OutputAddress: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+        ReturnAddress: bc1qreturnaddress1234567890abcdef
+        MaxSlippage: 0.01
+      properties:
+        InputAsset:
+          type: string
+          description: Asset you are sending (e.g. "BTC")
+          example: BTC
+        OutputAsset:
+          type: string
+          description: Asset you want to receive (e.g. "ETH")
+          example: ETH
+        OutputAddress:
+          type: string
+          description: Address on the output chain to receive funds
+          example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+        ReturnAddress:
+          type: string
+          description: Address on the input chain to refund to if execution fails
+          example: bc1qreturnaddress1234567890abcdef
+        MaxSlippage:
+          type: number
+          format: float
+          description: Maximum acceptable rate degradation as a fraction (e.g. 0.01 = 1%). Default 0 = no limit.
+          example: 0.01
+      required:
+      - InputAsset
+      - OutputAsset
+      - OutputAddress
     AssetPrice:
       type: object
       example:
@@ -561,99 +657,3 @@ components:
       - TargetBalance
       - CurrentBalance
       - FundingAddress
-    Error:
-      type: object
-      example:
-        result: error
-        error: Invalid output address format for ETH
-      properties:
-        result:
-          type: string
-          enum:
-          - error
-          example: error
-        error:
-          type: string
-          description: Description of the error
-          example: Invalid output address format for ETH
-      required:
-      - result
-      - error
-    ExecutedTrade:
-      type: object
-      example:
-        InputAmount: 0.5
-        InputUsd: 32716.09
-        OutputAmount: 9.42
-        OutputUsd: 32562.86
-        Overpay: 0.0
-        Warning: ''
-      properties:
-        InputAmount:
-          type: number
-          format: float
-          description: Input amount used in the calculation
-          example: 0.5
-        InputUsd:
-          type: number
-          format: float
-          description: USD value of the input
-          example: 32716.09
-        OutputAmount:
-          type: number
-          format: float
-          description: Expected output amount
-          example: 9.42
-        OutputUsd:
-          type: number
-          format: float
-          description: USD value of the output
-          example: 32562.86
-        Overpay:
-          type: number
-          format: float
-          description: Amount exceeding the cap that would be returned
-          example: 0.0
-        Warning:
-          type: string
-          description: Describes why execution would be degraded
-          example: ''
-      required:
-      - InputAmount
-      - InputUsd
-      - OutputAmount
-      - OutputUsd
-    TradeRequest:
-      type: object
-      example:
-        InputAsset: BTC
-        OutputAsset: ETH
-        OutputAddress: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
-        ReturnAddress: bc1qreturnaddress1234567890abcdef
-        MaxSlippage: 0.01
-      properties:
-        InputAsset:
-          type: string
-          description: Asset you are sending (e.g. "BTC")
-          example: BTC
-        OutputAsset:
-          type: string
-          description: Asset you want to receive (e.g. "ETH")
-          example: ETH
-        OutputAddress:
-          type: string
-          description: Address on the output chain to receive funds
-          example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
-        ReturnAddress:
-          type: string
-          description: Address on the input chain to refund to if execution fails
-          example: bc1qreturnaddress1234567890abcdef
-        MaxSlippage:
-          type: number
-          format: float
-          description: Maximum acceptable rate degradation as a fraction (e.g. 0.01 = 1%). Default 0 = no limit.
-          example: 0.01
-      required:
-      - InputAsset
-      - OutputAsset
-      - OutputAddress
