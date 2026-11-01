@@ -64,16 +64,119 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Tristero is a trustless, cross-chain trading protocol backed by General Catalyst. Traders use its API and Python/TypeScript SDKs for spot swaps of ERC-20 tokens across EVM chains (Permit2 / EIP-712 signed orders), leveraged margin positions up to 10x, and cross-VM swaps into non-EVM assets like Bitcoin, Monero, and Litecoin via the Feather balance-sheet swap relay. Execution is non-custodial and MEV-protected, with real-time quote streaming over WebSocket.
+Tristero is a trustless, cross-chain trading protocol backed by General Catalyst. On-chain traders use its API and Python/TypeScript SDKs to access deep liquidity across DEXs and CEXs for spot swaps of ERC-20 tokens across EVM chains (via Permit2 / EIP-712 signed orders), leveraged margin positions up to 10x, and cross-VM swaps into non-EVM assets like Bitcoin, Monero, and Litecoin through its Feather balance-sheet swap relay. Execution is non-custodial and MEV-protected, with real-time quote streaming over WebSocket, and the company's research roots are in on-chain dark pools and encrypted order matching.
 
-- Website: https://tristero.com
-- Developer docs: https://docs.tristero.com
-- App: https://app.tristero.com
-- GitHub: https://github.com/tristeroresearch
+**Areas:** Company · Cryptocurrency · Trading · DeFi · Cross-Chain · Web3 · Margin Trading · Dark Pools
 
-## APIs
+## Tristero on APIs.io
 
-- **Tristero API** (`https://api.tristero.com/v2`) — spot swap quotes, signed order submission, margin positions. OpenAPI: `openapi/tristero-api-openapi.json`
-- **Feather API** (`https://feather-prod.tristero.com`) — unauthenticated cross-VM swap relay (assets, price, trade, status). OpenAPI: `openapi/tristero-feather-api-openapi.json`
+Everything profiled for Tristero is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/tristero/](https://apis.io/providers/tristero/)** — or go straight to one of the APIs or properties below.
 
-Backed by: general-catalyst
+### APIs (6)
+
+- [Tristero Assets API](https://apis.io/apis/tristero/tristero-assets-api/) — The Assets API from Tristero — 1 operation(s) for assets.
+- [Tristero Orders API](https://apis.io/apis/tristero/tristero-orders-api/) — Submit and manage orders
+- [Tristero Pricing API](https://apis.io/apis/tristero/tristero-pricing-api/) — The Pricing API from Tristero — 1 operation(s) for pricing.
+- [Tristero Quotes API](https://apis.io/apis/tristero/tristero-quotes-api/) — Request quotes for swaps and margin positions
+- [Tristero Trading API](https://apis.io/apis/tristero/tristero-trading-api/) — The Trading API from Tristero — 2 operation(s) for trading.
+- [Tristero Wallets API](https://apis.io/apis/tristero/tristero-wallets-api/) — Wallet and position queries
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [tristero](https://apis.io/servers/tristero/tristero/)
+
+#### Collections (7)
+
+Postman and Open Collection request collections.
+
+- [Tristero Assets API](https://apis.io/collections/tristero/open-tristero-assets-api/)
+- [Tristero Assets Margin API](https://apis.io/collections/tristero/open-tristero-margin-api/)
+- [Tristero Assets Orders API](https://apis.io/collections/tristero/open-tristero-orders-api/)
+- [Tristero Assets Pricing API](https://apis.io/collections/tristero/open-tristero-pricing-api/)
+- [Tristero Assets Quotes API](https://apis.io/collections/tristero/open-tristero-quotes-api/)
+- [Tristero Assets Trading API](https://apis.io/collections/tristero/open-tristero-trading-api/)
+- [Tristero Assets Wallets API](https://apis.io/collections/tristero/open-tristero-wallets-api/)
+
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Tristero Api Overlay](https://apis.io/overlays/tristero/tristero-api-overlay/)
+- [Tristero Feather Api Overlay](https://apis.io/overlays/tristero/tristero-feather-api-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Tristero Authentication](https://apis.io/security/tristero/tristero-authentication/)
+- [Tristero Domain Security](https://apis.io/security/tristero/tristero-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://tristero.com)
+- [Documentation](https://docs.tristero.com/docs/tristero)
+- [Getting started](https://docs.tristero.com/docs/feather/quickstart)
+- [API reference](https://docs.tristero.com/docs/tristero/api/getQuote)
+- [Blog](https://tristero.substack.com/)
+- [GitHub](https://github.com/tristeroresearch)
+
+## API Evangelist rating
+
+**Kin Score 37.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 51.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 5.3 |
+| Developer ergonomics | 73.2 |
+| Access clarity | 13.2 |
+
+**Agent readiness 27.2** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 15.7** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/tristero/](https://apis.io/providers/tristero/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Tristero: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/tristero/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
